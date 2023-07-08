@@ -370,3 +370,15 @@ input[type="submit"] {
 input[type="submit"]:hover {
   background-color: #d4eaaf; /* Specify your desired background color on hover */
 }
+
+.loading-message {
+  display: none; /* Initially hide the loading message */
+  font-size: 16px;
+  color: #ffffff;
+  /* Add any additional styles you want for the loading message */
+  /* For example: */
+  text-align: center;
+  margin-top: 10px;
+  padding: 5px;
+  background-color: #f5f5f5;
+}

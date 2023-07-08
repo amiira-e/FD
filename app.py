@@ -55,6 +55,7 @@ def show_data():
 
         # Make predictions using the model
         prediction = model.predict(input_data)[0]
+        print(prediction)
 
         # Connect to the SQLite database
         connection = sqlite3.connect(db_path)

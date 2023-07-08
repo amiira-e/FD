@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="../static/result.css">
@@ -102,10 +102,14 @@
     </tbody>
 </table>
 {% endif %}
+<br><br>
 
 <p id="fraud-section"></p>
-<i class="fas fa-search logo"></i>
-<h2>Fraud prediction</h2>
+<h2>
+  <i class="fas fa-search logo"></i>
+  Fraud prediction
+</h2>
+
 <form class="form2" action="{{ url_for('show_data') }}" method="post">
     <div class="form-row">
         <div class="form-group">
@@ -162,6 +166,22 @@
     </div>
     <div id="loading-message" class="loading-message"></div>
 </form>
+
+<h1>Fraud Detection Result</h1>
+
+<!-- Display the prediction result and other relevant information -->
+<h2>Prediction: {{ prediction }}</h2>
+<h3>Is Fraudulent: {{ is_fraudulent }}</h3>
+
+<!-- Display the data, if needed -->
+<table>
+    <thead>
+        <!-- Table header row -->
+    </thead>
+    <tbody>
+        <!-- Iterate over the data and display each row -->
+    </tbody>
+</table>
 
 </body>
 </html>
