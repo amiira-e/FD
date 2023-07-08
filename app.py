@@ -11,7 +11,6 @@ app = Flask(__name__)
 # Specify the path to the model file
 model_path = os.path.join(os.path.dirname(__file__), 'static', 'model.pkl')
 
-
 # Load the trained model
 with open(model_path, 'rb') as f:
     model = pickle.load(f)
@@ -31,7 +30,7 @@ def prediction():
     return redirect(url_for('show_data', nameOrig='customer_name_here'))
 
 # Configure the database connection
-db_path = 'C:/Users/23059/OneDrive/Desktop/Amiira/DB_test/demo.db'
+db_path = 'C:/Users/23059/OneDrive/Desktop/Amiira/DB_test/Pastdata.db'
 
 @app.route('/result', methods=['GET', 'POST'])
 def show_data():
@@ -62,7 +61,7 @@ def show_data():
         cursor = connection.cursor()
 
         # Execute a query to retrieve data for the given customer name
-        query = "SELECT * FROM fraud_data WHERE nameOrig = ?"
+        query = "SELECT * FROM train_data WHERE nameOrig = ?"
         cursor.execute(query, (nameOrig,))
 
         # Fetch the data from the query result
@@ -72,29 +71,16 @@ def show_data():
         cursor.close()
         connection.close()
 
-        # Pass the data and prediction to the template and render the page
-        return render_template('result.html', data=data, prediction=prediction)
-    
-    # # Handle the GET request (initial page load)
-    # # You can remove this part if you don't need to display any data initially
-    # customer_name = request.args.get('nameOrig')
-    # if customer_name:
-    #     connection = sqlite3.connect(db_path)
-    #     cursor = connection.cursor()
-    #     query = "SELECT * FROM fraud_data WHERE nameOrig = ?"
-    #     cursor.execute(query, (customer_name,))
-    #     data = cursor.fetchall()
-    #     cursor.close()
-    #     connection.close()
-    #     return render_template('result.html', data=data)
-    
-    # return render_template('result.html')
-        # ...
-    
+        # Check if any row has isFraud = 1
+        is_fraudulent = any(row[10] == 1 for row in data)
+
+        # Pass the data, prediction, and is_fraudulent flag to the template
+        return render_template('result.html', data=data, prediction=prediction, is_fraudulent=is_fraudulent)
+
     # Handle the GET request (initial page load and customer search)
     search_type = request.args.get('searchType')
     search_value = request.args.get('searchValue')
-    
+
     if search_type and search_value:
         # Connect to the SQLite database
         connection = sqlite3.connect(db_path)
@@ -102,9 +88,9 @@ def show_data():
 
         # Execute a query to retrieve data based on the search type and value
         if search_type == 'nameOrig':
-            query = "SELECT * FROM fraud_data WHERE nameOrig = ?"
+            query = "SELECT * FROM train_data WHERE nameOrig = ?"
         elif search_type == 'nameDest':
-            query = "SELECT * FROM fraud_data WHERE nameDest = ?"
+            query = "SELECT * FROM train_data WHERE nameDest = ?"
 
         cursor.execute(query, (search_value,))
 
@@ -115,11 +101,26 @@ def show_data():
         cursor.close()
         connection.close()
 
-        # Pass the data to the template and render the page
-        return render_template('result.html', data=data)
+        # Check if any row has isFraud = 1
+        is_fraudulent = any(row[10] == 1 for row in data)
+
+        # Pass the data, is_fraudulent flag, and search_type/search_value to the template
+        return render_template('result.html', data=data, is_fraudulent=is_fraudulent,
+                               searchType=search_type, searchValue=search_value)
 
     return render_template('result.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
 
+
+# import pandas as pd
+# import sqlite3
+
+# df=pd.read_csv('concatenated_data.csv')
+
+# connection=sqlite3.connect('PastData.db')
+
+# df.to_sql('train_data',connection,if_exists='replace')
+
+# connection.close()

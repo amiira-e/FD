@@ -177,13 +177,13 @@ form.form2 {
   border-radius: 5px;
   border: 2px solid #8b96f9; /*Add border color*/
   margin: 0 auto; 
-  width:250px;
+  width:500px;
   text-align: center; /* Add this line to center the form's contents */
   padding-top: 40px; /*box height*/
   margin-top: 1%;
   box-shadow: 0 0 5px rgba(191, 136, 136, 0.3);
   color: #ffffff; /* Add this line to set the text color */
-  height: 150px;
+  height: 350px;
 }
 
 table {
@@ -222,16 +222,25 @@ table th {
 }
 
 table tr:nth-child(even) {
-  background-color: #e5f8f4;
+  background-color: #060606;
   color:#000000;
 }
 
+
+table tr:nth-child(odd) {
+  background-color: #000000; /* Set the background color for odd rows */
+  color: #000000; /* Set the text color for odd rows */
+}
+
+
 table tr:hover {
   background-color: #d4eaaf;
+  color: #000000;
 }
 
 table tr:last-child {
   border-bottom: 2px solid  #000000;
+  color: #000000;
 }
 
 table tr.active-row {
