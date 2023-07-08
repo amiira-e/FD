@@ -1,0 +1,66 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Flex Container</title>
+  <link rel="stylesheet" type="text/css" href="../static/home.css">
+</head>
+<body>
+  
+  <div class="company-info">
+    <img src="{{ url_for('static', filename='new_logo.png') }}" alt="Company Logo" class="company-logo">
+  </div> 
+
+  <div class="flex-container">
+    <div class="flex-item">
+      <img src="{{ url_for('static', filename='real2.jpg') }}" alt="Image 1">
+      <h2>Real-time Analytics</h2>
+      <p>Detect and prevent fraud with the powerful real-time analytics dashboard. <br> Gain valuable insights into fraudulent patterns and behaviors and take immediate action.</p>
+      <br><br><br>
+      <a href="{{ url_for('dashboard') }}" class="image-button">Get insights on the current data</a>
+    </div>
+    <div class="flex-item">
+      <img src="{{ url_for('static', filename='ai.jpg') }}" alt="Image 2">
+      <h2>Advanced Detection</h2>
+      <p>Discover the power of advanced detection with cutting-edge machine learning algorithms.<br> Stay one step ahead of fraudsters as these algorithms proactively identify and prevent fraudulent activities.<br> The intelligent system leverages the latest technology to protect us from deceiful acts. </p>
+      <br><br>
+      <a href="{{ url_for('prediction') }}" class="image-button">Perform fraud detection and prediction</a>
+    </div>
+  </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Flex Container</title>
+  <link rel="stylesheet" type="text/css" href="../static/home.css">
+</head>
+<body>
+  
+  <div class="company-info">
+    <img src="{{ url_for('static', filename='new_logo.png') }}" alt="Company Logo" class="company-logo">
+  </div> 
+
+  <div class="flex-container">
+    <div class="flex-item">
+      <img src="{{ url_for('static', filename='real2.jpg') }}" alt="Image 1">
+      <h2>Real-time Analytics</h2>
+      <p>Detect and prevent fraud with the powerful real-time analytics dashboard. <br> Gain valuable insights into fraudulent patterns and behaviors and take immediate action.</p>
+      <br><br><br>
+      <a href="{{ url_for('dashboard') }}" class="image-button">Get insights on the current data</a>
+    </div>
+    <div class="flex-item">
+      <img src="{{ url_for('static', filename='ai.jpg') }}" alt="Image 2">
+      <h2>Advanced Detection</h2>
+      <p>Discover the power of advanced detection with cutting-edge machine learning algorithms.<br> Stay one step ahead of fraudsters as these algorithms proactively identify and prevent fraudulent activities.<br> The intelligent system leverages the latest technology to protect us from deceiful acts. </p>
+      <br><br>
+      <a href="{{ url_for('prediction') }}" class="image-button">Perform fraud detection and prediction</a>
+      <!-- <a href="{{ url_for('show_data', nameOrig='customer_name_here') }}" class="image-button">Perform fraud detection and prediction</a> -->
+
+      <!-- <a href="{{ url_for('show_data', nameOrig='customer_name_here') }}" class="image-button">Perform fraud detection and prediction</a> -->
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,337 @@
+ <!-- <!DOCTYPE html>
+ <html>
+ <head>
+     <link rel="stylesheet" type="text/css" href="../static/result.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+     <script src="../static/result.js"></script>
+ </head>
+ <body>
+   
+    <div class="sidenav">
+        <p class="sidenav-title">Choose a task</p>
+        <a href="#form-section" class="sidenav-button">
+            <i class="fas fa-chart-line"></i> 
+            Monitor customers' behaviour
+        </a>
+        <a href="#fraud-section" class="sidenav-button">
+            <i class="fas fa-search"></i> 
+            Fraud detection
+        </a>
+        <a href="#anomaly-section" class="sidenav-button">
+            <i class="fas fa-exclamation-triangle"></i> 
+            Anomaly detection
+        </a>
+    </div>
+    
+    <p id="form-section"></p>
+    <h2>
+        <i class="fas fa-chart-line"></i>
+        Customer Transaction Monitoring
+    </h2>
+    <form action="{{ url_for('show_data') }}" method="get">
+      <label for="searchType" class="input-label">Customer type</label><br>
+      <select name="searchType">
+          <option value="nameOrig">Sender</option>
+          <option value="nameDest">Recipient</option>
+      </select><br>
+      <label for="searchValue" class="input-label">Customer ID</label><br>
+      <input type="text" name="searchValue">
+      <input type="submit" value="Submit">
+  </form>
+  
+     {% if data %}
+     <h3>
+      <i class="fas fa-list-alt"></i>
+      Customer Activity Logs
+     </h3>
+  
+     <table>
+         <thead>
+             <tr>
+               
+                 <th>Step</th>
+                 <th>Type</th>
+                 <th>Amount</th>
+                 <th>Name Orig</th>
+                 <th>Old Balance Orig</th>
+                 <th>New Balance Orig</th>
+                 <th>Name Dest</th>
+                 <th>Old Balance Dest</th>
+                 <th>New Balance Dest</th>
+                 <th>Is Fraud</th>
+                 <th>Is Flagged Fraud</th>
+             </tr>
+         </thead>
+         <tbody>
+             {% for row in data %}
+                 <tr>
+                    
+                     <td>{{ row[1] }}</td>
+                     <td>{{ row[2] }}</td>
+                     <td>{{ row[3] }}</td>
+                     <td>{{ row[4] }}</td>
+                     <td>{{ row[5] }}</td>
+                     <td>{{ row[6] }}</td>
+                     <td>{{ row[7] }}</td>
+                     <td>{{ row[8] }}</td>
+                     <td>{{ row[9] }}</td>
+                     <td>{{ row[10] }}</td>
+                     <td>{{ row[11] }}</td>
+                 </tr>
+                 <tr>
+                     <td colspan="12">
+                         {% if row[10] == 1 %}
+                         
+                         
+                             <script>
+                                window.addEventListener('DOMContentLoaded', (event) => {
+                                    var response = confirm("Fraudulent Transaction Detected! Investigate further?");
+            
+                                    if (response) {
+                                        // User clicked "OK" or "Yes"
+                                        window.location.href ="#fraud-section";
+                                    } else {
+                                        // User clicked "Cancel" or "No"
+                                        // Handle the cancellation logic here
+                                    }
+                                });
+                                </script>
+                         {% else %}
+                       
+                         {% endif %}
+                     </td>
+                 </tr>
+             {% endfor %}
+         </tbody>        
+     </table>
+     {% endif %}
+     
+<p id="fraud-section"></p>
+<h3>Fraud prediction</h3>
+<form class="fraud-form" action="{{ url_for('show_data') }}" method="post">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="step" class="input-label">Step</label><br>
+      <input type="number" name="step" required>
+    </div>
+    <div class="form-group">
+      <label for="type" class="input-label">Type</label><br>
+      <input type="text" name="type" required>
+    </div>
+    <div class="form-group">
+      <label for="amount" class="input-label">Amount</label><br>
+      <input type="number" step="0.01" name="amount" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="nameOrig" class="input-label">nameOrig</label><br>
+      <input type="text" name="nameOrig" required>
+    </div>
+    <div class="form-group">
+      <label for="oldbalanceOrg" class="input-label">Old Balance Orig</label><br>
+      <input type="number" step="0.01" name="oldbalanceOrg" required>
+    </div>
+    <div class="form-group">
+      <label for="newbalanceOrig" class="input-label">New Balance Orig</label><br>
+      <input type="number" step="0.01" name="newbalanceOrig" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="newDest" class="input-label">New Destination</label><br>
+      <input type="text" name="newDest" required>
+    </div>
+    <div class="form-group">
+      <label for="oldbalanceDest" class="input-label">Old Balance Dest</label><br>
+      <input type="number" step="0.01" name="oldbalanceDest" required>
+    </div>
+    <div class="form-group">
+      <label for="newbalanceDest" class="input-label">New Balance Dest</label><br>
+      <input type="number" step="0.01" name="newbalanceDest" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="isFlaggedFraud" class="input-label">Is Flagged Fraud</label><br>
+      <input type="number" name="isFlaggedFraud" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <input type="submit" value="Detect Fraud">
+    </div>
+  </div>
+</form>
+
+ </body>
+ </html>
+  -->
+  <!DOCTYPE html>
+  <html>
+  <head>
+      <link rel="stylesheet" type="text/css" href="../static/result.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+      <script src="../static/result.js"></script>
+  </head>
+  <body>
+    
+   <div class="sidenav">
+       <p class="sidenav-title">Choose a task</p>
+       <a href="#form-section" class="sidenav-button">
+           <i class="fas fa-chart-line"></i> 
+           Monitor customers' behaviour
+       </a>
+       <a href="#fraud-section" class="sidenav-button">
+           <i class="fas fa-search"></i> 
+           Fraud detection
+       </a>
+       <a href="#anomaly-section" class="sidenav-button">
+           <i class="fas fa-exclamation-triangle"></i> 
+           Anomaly detection
+       </a>
+   </div>
+   
+   <p id="form-section"></p>
+   <h2>
+       <i class="fas fa-chart-line"></i>
+       Customer Transaction Monitoring
+   </h2>
+   <form class="form1" action="{{ url_for('show_data') }}" method="get">
+     <label for="searchType" class="input-label">Customer type</label><br>
+     <select name="searchType">
+         <option value="nameOrig">Sender</option>
+         <option value="nameDest">Recipient</option>
+     </select><br>
+     <label for="searchValue" class="input-label">Customer ID</label><br>
+     <input type="text" name="searchValue">
+     <input type="submit" value="Submit">
+   </form>
+  
+   <div id="error-message" class="error-message"></div>
+  
+   {% if data %}
+   <h3>
+     <i class="fas fa-list-alt"></i>
+     Customer Activity Logs
+   </h3>
+  
+   <table>
+       <thead>
+           <tr>
+               <!-- <th>ID</th> -->
+               <th>Step</th>
+               <th>Type</th>
+               <th>Amount</th>
+               <th>Name Orig</th>
+               <th>Old Balance Orig</th>
+               <th>New Balance Orig</th>
+               <th>Name Dest</th>
+               <th>Old Balance Dest</th>
+               <th>New Balance Dest</th>
+               <th>Is Fraud</th>
+               <th>Is Flagged Fraud</th>
+           </tr>
+       </thead>
+       <tbody>
+           {% for row in data %}
+               <tr>
+                   <!-- <td>{{ row[0] }}</td> -->
+                   <td>{{ row[1] }}</td>
+                   <td>{{ row[2] }}</td>
+                   <td>{{ row[3] }}</td>
+                   <td>{{ row[4] }}</td>
+                   <td>{{ row[5] }}</td>
+                   <td>{{ row[6] }}</td>
+                   <td>{{ row[7] }}</td>
+                   <td>{{ row[8] }}</td>
+                   <td>{{ row[9] }}</td>
+                   <td>{{ row[10] }}</td>
+                   <td>{{ row[11] }}</td>
+               </tr>
+               <tr>
+                   <td colspan="12">
+                       {% if row[10] == 1 %}
+                         <script>
+                           window.addEventListener('DOMContentLoaded', (event) => {
+                               var response = confirm("Fraudulent Transaction Detected! Investigate further?");
+  
+                               if (response) {
+                                   // User clicked "OK" or "Yes"
+                                   window.location.href ="#fraud-section";
+                               } else {
+                                   // User clicked "Cancel" or "No"
+                                   // Handle the cancellation logic here
+                               }
+                           });
+                         </script>
+                       {% endif %}
+                   </td>
+               </tr>
+           {% endfor %}
+       </tbody>        
+   </table>
+   {% endif %}
+   
+   <p id="fraud-section"></p>
+   <h3>Fraud prediction</h3>
+   <form class="form2" action="{{ url_for('show_data') }}" method="post">
+     <div class="form-row">
+       <div class="form-group">
+         <label for="step" class="input-label">Step</label><br>
+         <input type="number" name="step" required>
+       </div>
+       <div class="form-group">
+         <label for="type" class="input-label">Type</label><br>
+         <input type="text" name="type" required>
+       </div>
+       <div class="form-group">
+         <label for="amount" class="input-label">Amount</label><br>
+         <input type="number" step="0.01" name="amount" required>
+       </div>
+     </div>
+     <div class="form-row">
+       <div class="form-group">
+         <label for="nameOrig" class="input-label">nameOrig</label><br>
+         <input type="text" name="nameOrig" required>
+       </div>
+       <div class="form-group">
+         <label for="oldbalanceOrg" class="input-label">Old Balance Orig</label><br>
+         <input type="number" step="0.01" name="oldbalanceOrg" required>
+       </div>
+       <div class="form-group">
+         <label for="newbalanceOrig" class="input-label">New Balance Orig</label><br>
+         <input type="number" step="0.01" name="newbalanceOrig" required>
+       </div>
+     </div>
+     <div class="form-row">
+       <div class="form-group">
+         <label for="newDest" class="input-label">New Destination</label><br>
+         <input type="text" name="newDest" required>
+       </div>
+       <div class="form-group">
+         <label for="oldbalanceDest" class="input-label">Old Balance Dest</label><br>
+         <input type="number" step="0.01" name="oldbalanceDest" required>
+       </div>
+       <div class="form-group">
+         <label for="newbalanceDest" class="input-label">New Balance Dest</label><br>
+         <input type="number" step="0.01" name="newbalanceDest" required>
+       </div>
+     </div>
+     <div class="form-row">
+       <div class="form-group">
+         <label for="isFlaggedFraud" class="input-label">Is Flagged Fraud</label><br>
+         <input type="number" name="isFlaggedFraud" required>
+       </div>
+     </div>
+     <div class="form-row">
+       <div class="form-group">
+         <input type="submit" value="Detect Fraud">
+       </div>
+     </div>
+     <div id="loading-message" class="loading-message"></div>
+   </form>
+  
+  </body>
+  </html>
+  
