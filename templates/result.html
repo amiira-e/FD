@@ -3,23 +3,79 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../static/result.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            display: flex;
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            background-image: url("../static/resultbackground.jpg");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+        
+        .container {
+            display: flex;
+            text-align: center;
+            flex-direction: column; /* Align items vertically */
+        }
+        
+        .task {
+            flex: 1;
+        }
+        
+        .task-link {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            background-color: #e3a7a7;
+            margin-right: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            color: black;
+        }
+        
+        .task-link:hover {
+            background-color: #ccc;
+        }
+        
+        .task-description {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
+        <h1>Choose a task</h1>
         <div class="task">
             <a href="{{ url_for('monitor') }}" class="task-link">
                 <i class="fas fa-chart-line"></i>
                 Monitor customers' behaviour
             </a>
-            <p class="task-description">This option allows you to monitor customers' behavior.<br>You can have a first overview of each customer's past transaction history to have an insight if the customer is likely to have a fraudulent past</p>
+            <p class="task-description">This option allows you to monitor customers' behavior.
+                You can gain an initial overview of each customer's past transaction history <br> to obtain insights into the frequency of both fraudulent and non-fraudulent cases associated with each customer.</p>
         </div>
+        <br>   <br>
         <div class="task">
             <a href="{{ url_for('fraud') }}" class="task-link">
                 <i class="fas fa-search"></i>
                 Fraud detection
             </a>
-            <p class="task-description">This option allows you to detect fraud transactions. By inputting the required features, we can know how fraudulent the transaction is.</p>
+            <p class="task-description">This functionality enables the detection of fraudulent transactions. By providing the necessary input features, advanced AI models such as LSTM (Long Short-Term Memory) and <br>
+                Hybrid CNN-LSTM (Convolutional Neural Network - Long Short-Term Memory) are employed to accurately identify instances of fraud.</p>
         </div>
+        <br>   <br>
         <div class="task">
             <a href="{{ url_for('prediction') }}" class="task-link">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -30,4 +86,3 @@
     </div>
 </body>
 </html>
-
