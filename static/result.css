@@ -117,8 +117,8 @@ input[type="text"]:focus {
     color: rgb(0, 0, 0);
 }
 
-input[type="submit"] {
-  /* Other styles for the submit button */
+/* input[type="submit"] {
+ 
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -131,7 +131,7 @@ input[type="submit"] {
   margin-top: 10px;
   font-size: 12px;
   font-family: Verdana, Geneva, sans-serif;
-}
+} */
 
 select[name="searchType"] {
   font-size: 12px;
@@ -351,8 +351,43 @@ table tr.active-row {
 }
 
 /*detect fraud button*/
-input[type="submit"] {
-  /* Other styles for the submit button */
+/* input[type="submit"] {
+  
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #5945c9; 
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+  font-size: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+} */
+
+input[type="submit"]:hover {
+  background-color: #d4eaaf; /* Specify your desired background color on hover */
+}
+
+input.form1-submit[type="submit"] {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #000000;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+  font-size: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+ 
+}
+
+input.form2-submit[type="submit"] {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -365,10 +400,6 @@ input[type="submit"] {
   margin-top: 10px;
   font-size: 12px;
   font-family: Verdana, Geneva, sans-serif;
-}
-
-input[type="submit"]:hover {
-  background-color: #d4eaaf; /* Specify your desired background color on hover */
 }
 
 .loading-message {

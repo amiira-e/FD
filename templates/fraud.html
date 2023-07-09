@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/fraud.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="../static/result.js"></script>
+</head>
+<body>
+<p id="fraud-section"></p>
+<h2>
+  <i class="fas fa-search logo"></i>
+  Fraud prediction
+</h2>
+
+
+<form class="form2" action="{{ url_for('fraud') }}?task=detect_fraud" method="post">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="step" class="input-label">Step</label><br>
+            <input type="number" name="step" required>
+        </div>
+        <div class="form-group">
+            <label for="type" class="input-label">Type</label><br>
+            <input type="text" name="type" required>
+        </div>
+        <div class="form-group">
+            <label for="amount" class="input-label">Amount</label><br>
+            <input type="number" step="0.01" name="amount" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="nameOrig" class="input-label">nameOrig</label><br>
+            <input type="text" name="nameOrig" required>
+        </div>
+        <div class="form-group">
+            <label for="oldbalanceOrg" class="input-label">Old Balance Orig</label><br>
+            <input type="number" step="0.01" name="oldbalanceOrg" required>
+        </div>
+        <div class="form-group">
+            <label for="newbalanceOrig" class="input-label">New Balance Orig</label><br>
+            <input type="number" step="0.01" name="newbalanceOrig" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="newDest" class="input-label">New Destination</label><br>
+            <input type="text" name="newDest" required>
+        </div>
+        <div class="form-group">
+            <label for="oldbalanceDest" class="input-label">Old Balance Dest</label><br>
+            <input type="number" step="0.01" name="oldbalanceDest" required>
+        </div>
+        <div class="form-group">
+            <label for="newbalanceDest" class="input-label">New Balance Dest</label><br>
+            <input type="number" step="0.01" name="newbalanceDest" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="isFlaggedFraud" class="input-label">Is Flagged Fraud</label><br>
+            <input type="number" name="isFlaggedFraud" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <input type="submit" value="Detect Fraud" class="form2-submit">
+
+        </div>
+    <!-- </div>
+    <div id="loading-message" class="loading-message"></div> -->
+    </div>
+</form>
+
+<br><br><br><br>
+<!-- <h1>Fraud Detection Result</h1>
+
+<h3>Prediction: {{ prediction }}</h3>
+<h3>Is Fraudulent: {{ is_fraudulent }}</h3> -->
+{% if prediction is not none %}
+  <h1>Fraud Detection Result</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Prediction</th>
+        <th>Is Fraudulent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ prediction }}</td>
+        <td>Is Fraudulent: {{ is_fraudulent }}</td>
+      </tr>
+    </tbody>
+  </table>
+{% endif %}
+</body>
+</html>

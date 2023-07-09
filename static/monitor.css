@@ -1,0 +1,416 @@
+body {
+
+    background-color: #000000;
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  
+  .sidenav .sidenav-title {
+    /* Styles for the "Choose a task" text */
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 200;
+    color: #000000;
+    
+  }
+  .form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px; /* Adjust the value to add desired spacing */
+    justify-content: center; /* Center the content horizontally */
+    padding-top: 10px;
+    color:#009879;
+  }
+  
+  .form-group {
+    margin-right: 10px;
+    text-align: center; /* Center the content horizontally */
+  }
+  
+  .input-label {
+    /* Styles for the input labels */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    /* Other styles */
+  }
+  
+  input[type="number"],
+  input[type="text"] {
+    display: inline;
+    width: 150px;
+  }
+  
+  input[type="text"],
+  select[name="searchType"] {
+    /* Styles for the text field and dropdown menu */
+    display: inline-block;
+    width: 150px;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  input[type="text"]:focus,
+  select[name="searchType"]:focus {
+    /* Styles for the focused state */
+    border-color: dodgerblue;
+    box-shadow: 0 0 5px dodgerblue;
+    color: rgb(0, 0, 0);
+  }
+  
+  
+  h1 {
+      color: blue;
+      font-size: 15px;
+      font-family: cursive;
+      text-align: center; /* Add this line to center the h1 element */
+  }
+  
+  h2 {
+    color: rgb(244, 250, 228);
+    text-align: center;
+    /* font-family:  Geneva; */
+    font-size: 22px;
+    font-weight: bold;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  }
+  
+  h3{
+    text-align: center; 
+    font-size: 18px;
+    padding-top: 70px;
+    color: rgb(255, 255, 255);
+    /* font-family: Arial, sans-serif; */
+    font-family:  Genevai;
+    /* text-shadow: 2px 2px 4px rgba(97, 158, 237, 0.3); Add a shadow effect to the text */
+  }
+  
+  p {
+      font-size: 16px;
+      text-align: center; /* Add this line to center the h1 element */
+  }
+  
+  .input-label {
+    font-size: 14px;
+    font-family: Verdana, Geneva, sans-serif;
+    color: rgb(0, 0, 0); /* Add this line to set the text color to white */
+  }
+  
+  /* styles.css */
+  input[type="text"] {
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+  }
+  
+  input[type="text"]:focus {
+      border-color: dodgerblue;
+      box-shadow: 0 0 5px dodgerblue;
+      color: rgb(0, 0, 0);
+  }
+  
+  /* input[type="submit"] {
+   
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+  } */
+  
+  select[name="searchType"] {
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+    text-align: center;
+  }
+  
+  .search-input {
+    font-size: 12px; /* Adjust the font size as per your preference */
+  }
+  
+  input[type="submit"]:hover {
+      background-color: #d7d959;
+  }
+  
+  select[name="searchType"] option {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+  }
+  
+  select[name="searchValue"] option {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  input[name="searchValue"] {
+    font-size: 12px; /* Adjust the font size as per your preference */
+  }
+  
+  form.form1 {
+      /* background-color:  #6fafe1; */
+      background-image: url("../static/sidenav.jpg");
+      padding: 20px;
+      border-radius: 5px;
+      border: 2px solid #8b96f9; /*Add border color*/
+      margin: 0 auto; 
+      width:250px;
+      text-align: center; /* Add this line to center the form's contents */
+      padding-top: 40px; /*box height*/
+      margin-top: 1%;
+      box-shadow: 0 0 5px rgba(191, 136, 136, 0.3);
+      color: #ffffff; /* Add this line to set the text color */
+      height: 150px;
+  }
+  
+  form.form2 {
+    background-image: url("../static/sidenav.jpg");
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid #8b96f9; /*Add border color*/
+    margin: 0 auto; 
+    width:500px;
+    text-align: center; /* Add this line to center the form's contents */
+    padding-top: 40px; /*box height*/
+    margin-top: 1%;
+    box-shadow: 0 0 5px rgba(191, 136, 136, 0.3);
+    color: #ffffff; /* Add this line to set the text color */
+    height: 350px;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding-left: 300px; /* Adjust the value to push the table to the right */ /* Adjust the value to push the table to the right */
+  }
+  
+  table th,
+  table td {
+    border: 1px solid #ddd;
+    padding: 7px;
+    /* background-color: #a1ddd1; */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+    color: #fffefe; /* Add this line to set the text color to white */
+  }
+  
+  .fraudulent {
+    color: red;
+  }
+  
+  .non-fraudulent {
+    color: green;
+  }
+  
+  
+  table th {
+    background-color: #a1ddd1;
+    font-weight: bold;
+    text-align: center;
+    color:#000000;
+    padding-left: -40px;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #060606;
+    color:#000000;
+  }
+  
+  
+  table tr:nth-child(odd) {
+    background-color: #000000; /* Set the background color for odd rows */
+    color: #000000; /* Set the text color for odd rows */
+  }
+  
+  
+  table tr:hover {
+    background-color: #d4eaaf;
+    color: #000000;
+  }
+  
+  table tr:last-child {
+    border-bottom: 2px solid  #000000;
+    color: #000000;
+  }
+  
+  table tr.active-row {
+    font-weight: bold;
+    color: #009879;
+  }
+  
+    /* styles.css */
+  .sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    /* background-color: #010101; */
+    background-image: url("../static/sidenav.jpg");
+    overflow-x: hidden;
+    padding-top: 50px;
+    /* width: 100px;  */
+    display: flex; /* Add flexbox */
+    flex-direction: column; /* Arrange buttons vertically */
+    align-items: center; /* Center items horizontally */
+  }
+  
+  .sidenav-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 80%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: hsl(235, 83%, 23%);
+    font-weight: 200;
+    color: white;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-bottom: 40px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+  }
+  
+  .sidenav-button i {
+    margin-right: 5px; /* Adjust the margin as needed */
+  }
+  
+  .sidenav-button:hover {
+    background-color: #d7d959;
+  }
+  
+  .top-right-image {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .top-right-image img {
+    width: 150px; /* Increase the width value to increase the image size */
+    height: 100px;
+  }
+  
+  .sidenav-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  .form2 input[type="number"],
+  .form2 input[type="text"],
+  .form2 select {
+      /* Styles for the input fields */
+      display: inline-block;
+      width: 150px;
+      padding: 5px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.3s;
+  }
+  
+  .form2 input[type="number"]:focus,
+  .form2 input[type="text"]:focus,
+  .form2 select:focus {
+      /* Styles for the focused state */
+      border-color: dodgerblue;
+      box-shadow: 0 0 5px dodgerblue;
+      color: #000000;
+  }
+  
+  /*detect fraud button*/
+  /* input[type="submit"] {
+    
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5945c9; 
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+  } */
+  
+  input[type="submit"]:hover {
+    background-color: #d4eaaf; /* Specify your desired background color on hover */
+  }
+  
+  input.form1-submit[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #000000;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+   
+  }
+  
+  input.form2-submit[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5945c9; /* Specify your desired background color */
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+  }
+  
+  .loading-message {
+    display: none; /* Initially hide the loading message */
+    font-size: 16px;
+    color: #ffffff;
+    /* Add any additional styles you want for the loading message */
+    /* For example: */
+    text-align: center;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f5f5f5;
+  }
+  
