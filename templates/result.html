@@ -5,22 +5,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body>
-    <div class="sidenav">
-        <p class="sidenav-title">Choose a task</p>
-        <a href="{{ url_for('monitor') }}" class="sidenav-button">
-            <i class="fas fa-chart-line"></i>
-            Monitor customers' behaviour
-        </a>
-        <a href="{{ url_for('fraud') }}" class="sidenav-button">
-            <i class="fas fa-search"></i>
-            Fraud detection
-        </a>
-        <a href="{{ url_for('prediction') }}" class="sidenav-button">
-            <i class="fas fa-exclamation-triangle"></i>
-            Anomaly detection
-        </a>
+    <div class="container">
+        <div class="task">
+            <a href="{{ url_for('monitor') }}" class="task-link">
+                <i class="fas fa-chart-line"></i>
+                Monitor customers' behaviour
+            </a>
+            <p class="task-description">This option allows you to monitor customers' behavior.<br>You can have a first overview of each customer's past transaction history to have an insight if the customer is likely to have a fraudulent past</p>
+        </div>
+        <div class="task">
+            <a href="{{ url_for('fraud') }}" class="task-link">
+                <i class="fas fa-search"></i>
+                Fraud detection
+            </a>
+            <p class="task-description">This option allows you to detect fraud transactions. By inputting the required features, we can know how fraudulent the transaction is.</p>
+        </div>
+        <div class="task">
+            <a href="{{ url_for('prediction') }}" class="task-link">
+                <i class="fas fa-exclamation-triangle"></i>
+                Anomaly detection
+            </a>
+            <p class="task-description">This option allows you to detect anomalies in transactions.</p>
+        </div>
     </div>
 </body>
 </html>
-
 
