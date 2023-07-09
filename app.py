@@ -173,7 +173,7 @@ def generate_bar_chart(labels, values):
     encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
     plt.close()
 
-    return render_template('monitor.html', data=data, bar_chart=bar_chart)
+    return encoded_image
 
 # @app.route('/monitor', methods=['GET', 'POST'])
 # def monitor():
@@ -223,23 +223,6 @@ def generate_bar_chart(labels, values):
 #         # Generate the ROC curve image
 #         roc_curve_image = generate_roc_curve(prediction_probabilities)
 
-#         # Prepare the data for plotting
-#         labels = ['Fraudulent', 'Non-Fraudulent']
-#         values = [0, 0]  # Initialize with 0 occurrences
-#         for row in data:
-#             if row[11] == 1:
-#                 values[0] += 1
-#             elif row[11] == 0:
-#                 values[1] += 1
-
-#         # Generate the bar chart
-#         bar_chart = generate_bar_chart(labels, values)
-
-#         # Pass the data, prediction, is_fraudulent flag, ROC curve image, and bar chart to the template
-#         return render_template('monitor.html', data=data, prediction=prediction,
-#                                is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image,
-#                                bar_chart=bar_chart)
-
 #     else:
 #         # Handle the GET request (initial page load and customer search)
 #         search_type = request.args.get('searchType')
@@ -264,7 +247,7 @@ def generate_bar_chart(labels, values):
 #             # Close the database connection
 #             cursor.close()
 #             connection.close()
-
+            
 #             # Check if any row has isFraud = 1
 #             is_fraudulent = any(row[11] == 1 for row in data)
 
@@ -272,30 +255,14 @@ def generate_bar_chart(labels, values):
 #             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
 #                                    searchType=search_type, searchValue=search_value)
 
-#     return render_template('monitor.html')
+#         # Render the empty form when it's a GET request without searchType and searchValue
+#         return render_template('monitor.html')
+
 @app.route('/monitor', methods=['GET', 'POST'])
 def monitor():
     if request.method == 'POST':
         # Handle the form submission
-        step = int(request.form['step'])
-        type = request.form['type']
-        amount = float(request.form['amount'])
         nameOrig = request.form['nameOrig']
-        oldbalanceOrg = float(request.form['oldbalanceOrg'])
-        newbalanceOrig = float(request.form['newbalanceOrig'])
-        newDest = request.form['newDest']
-        oldbalanceDest = float(request.form['oldbalanceDest'])
-        newbalanceDest = float(request.form['newbalanceDest'])
-        isFlaggedFraud = int(request.form['isFlaggedFraud'])
-
-        # Prepare the input data for prediction
-        input_data = np.array([[step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, newDest,
-                                oldbalanceDest, newbalanceDest, isFlaggedFraud]])
-        input_data = input_data.astype(np.float32)
-        input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
-
-        # Make predictions using the model
-        prediction = model.predict(input_data)[0]
 
         # Connect to the SQLite database
         connection = sqlite3.connect(db_path)
@@ -315,12 +282,6 @@ def monitor():
         # Check if any row has isFraud = 1
         is_fraudulent = any(row[11] == 1 for row in data)
 
-        # Perform the prediction and get the prediction probabilities
-        prediction_probabilities = model.predict_proba(input_data)[0]
-
-        # Generate the ROC curve image
-        roc_curve_image = generate_roc_curve(prediction_probabilities)
-
         # Generate the bar chart
         labels = ['Fraudulent', 'Non-Fraudulent']
         values = [0, 0]  # Initialize with 0 occurrences
@@ -332,10 +293,8 @@ def monitor():
 
         bar_chart = generate_bar_chart(labels, values)
 
-        # Pass the data, prediction, is_fraudulent flag, ROC curve image, and bar chart to the template
-        return render_template('monitor.html', data=data, prediction=prediction,
-                               is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image,
-                               bar_chart=bar_chart)
+        # Pass the data, is_fraudulent flag, and bar chart to the template
+        return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent, bar_chart=bar_chart)
 
     else:
         # Handle the GET request (initial page load and customer search)
@@ -365,13 +324,24 @@ def monitor():
             # Check if any row has isFraud = 1
             is_fraudulent = any(row[11] == 1 for row in data)
 
-            # Pass the data, is_fraudulent flag, and search_type/search_value to the template
+            # Generate the bar chart
+            labels = ['Fraudulent', 'Non-Fraudulent']
+            values = [0, 0]  # Initialize with 0 occurrences
+            for row in data:
+                if row[11] == 1:
+                    values[0] += 1
+                elif row[11] == 0:
+                    values[1] += 1
+
+            bar_chart = generate_bar_chart(labels, values)
+
+            # Pass the data, is_fraudulent flag, search_type, search_value, and bar chart to the template
             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-                                   searchType=search_type, searchValue=search_value)
+                                   searchType=search_type, searchValue=search_value, bar_chart=bar_chart)
 
         # Render the empty form when it's a GET request without searchType and searchValue
         return render_template('monitor.html')
-        
+
 @app.route('/result', methods=['GET', 'POST'])
 def show_data():
     if request.method == 'POST':
