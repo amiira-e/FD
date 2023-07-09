@@ -332,3 +332,19 @@ body {
     background-color: #ddd;
   }
   
+  /*Back button CSS*/
+  .back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6fafe1;
+    color: #000000;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+.back-button:hover {
+    background-color: #e1f98b;
+}
