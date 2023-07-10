@@ -1,45 +1,52 @@
 body {
-    background-color: black;
-    color: white;
-  }
-  
-  h1 {
-    color: white;
-  }
-  
-  form {
-    margin-top: 20px;
-  }
-  
-  table {
-    max-width: 80%; /* Adjust the value as needed */
-    border-collapse: collapse;
-  }
-  
-  
-  th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid white;
-  }
-  
-  th {
-    background-color: #333;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #555;
-  }
-  
-  tr:hover {
-    background-color: #777;
-  }
-  
-  p {
-    margin: 5px 0;
-  }
-  
-  h2 {
-    margin-top: 20px;
-  }
-  
+  background-color: black;
+  color: white;
+}
+
+h1 {
+  color: white;
+}
+
+form {
+  margin-top: 20px;
+}
+
+table {
+  width: 50%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  text-align: center;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid white;
+}
+
+th {
+  background-color: #333;
+}
+
+tr:nth-child(even) {
+  background-color: #555;
+}
+
+tr:hover {
+  background-color: #777;
+}
+
+p {
+  margin: 5px 0;
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+body {
+  align-items: center; 
+  background-image: url("../static/resultbackground.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+}

@@ -232,7 +232,7 @@ def fraud():
         f1_score = metrics.f1_score(true_labels, binary_predictions)
 
         # Pass the data, prediction, is_fraudulent flag, ROC curve image, precision, recall, and F1 score to the template
-        return render_template('fraud.html', data=data, prediction=binary_predictions[0], is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image,
+        return render_template('fraud.html', data=data, prediction=binary_predictions, is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image,
                                precision=precision, recall=recall, f1_score=f1_score)
 
     return render_template('fraud.html')

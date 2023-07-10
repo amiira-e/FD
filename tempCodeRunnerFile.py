@@ -1,99 +1,65 @@
-# Create the LSTM model
-modelnew = Sequential()
-modelnew.add(LSTM(64, input_shape=(1, 10), return_sequences=False))
-modelnew.add(Dense(1, activation='sigmoid'))
+@app.route('/fraud', methods=['GET', 'POST'])
+def fraud():
+    if request.method == 'POST':
+        # Handle the form submission
+        step = int(request.form['step'])
+        type = request.form['type']
+        amount = float(request.form['amount'])
+        nameOrig = request.form['nameOrig']
+        oldbalanceOrg = float(request.form['oldbalanceOrg'])
+        newbalanceOrig = float(request.form['newbalanceOrig'])
+        newDest = request.form['newDest']
+        oldbalanceDest = float(request.form['oldbalanceDest'])
+        newbalanceDest = float(request.form['newbalanceDest'])
+        isFlaggedFraud = int(request.form['isFlaggedFraud'])
 
-opt = Adam(learning_rate=0.0012541)
+        # Prepare the input data for prediction
+        input_data = np.array([[step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, newDest,
+                                oldbalanceDest, newbalanceDest, isFlaggedFraud]])
+        input_data = input_data.astype(np.float32)
+        input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
 
-# Compile the model
-modelnew.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
+        # Make predictions using the model
+        prediction = model.predict(input_data)[0]
 
-# Define early stopping callback
-early_stopping = EarlyStopping(monitor='val_loss', patience=5, verbose=1)
+        # Connect to the SQLite database
+        connection = sqlite3.connect(db_path)
+        cursor = connection.cursor()
 
-# Train the model
-history = modelnew.fit(X_train_reshaped, y_train_resampled_final, epochs=10, batch_size=64, validation_split=0.1, callbacks=[early_stopping], verbose=1)
+        # Execute a query to retrieve data for the given customer name
+        query = "SELECT * FROM train_data WHERE nameOrig = ?"
+        cursor.execute(query, (nameOrig,))
 
-# Save the trained model using pickle
-with open('modelnew.pkl', 'wb') as file:
-    pickle.dump(modelnew, file)
+        # Fetch the data from the query result
+        data = cursor.fetchall()
 
-# Reshape test data for predictions
-X_test_reshaped = np.reshape(X_test_scaled, (X_test_scaled.shape[0], 1, X_test_scaled.shape[1]))
+        # Close the database connection
+        cursor.close()
+        connection.close()
 
-# Make predictions on test data
-y_pred_prob = modelnew.predict(X_test_reshaped)
-y_pred = (y_pred_prob > 0.5).astype(int)
+        # Check if any row has isFraud = 1
+        is_fraudulent = any(row[11] == 1 for row in data)
 
-# Evaluate the model
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+        # Perform the prediction and get the prediction probabilities
+        prediction_probabilities = model.predict(input_data)[0]
 
-# Threshold tuning
-thresholds = np.arange(0.1, 1.0, 0.1)
-best_f1_score = 0
-best_threshold = 0
+        # Generate the ROC curve image
+        roc_curve_image = generate_roc_curve(prediction_probabilities)
 
-for threshold in thresholds:
-    y_pred = (y_pred_prob > threshold).astype(int)
-    f1 = f1_score(y_test, y_pred)
+        # Convert the true labels to binary values (0 and 1)
+        true_labels = [row[11] for row in data]
 
-    if f1 > best_f1_score:
-        best_f1_score = f1
-        best_threshold = threshold
+        # Convert prediction probabilities to binary predictions using a threshold
+        threshold = 0.7  # Adjust the threshold as per your requirement
+        binary_predictions = [1 if prob >= threshold else 0 for prob in prediction_probabilities]
 
-# Apply best threshold to obtain final predictions
-y_pred = (y_pred_prob > best_threshold).astype(int)
+        # Calculate precision, recall, and F1 score
+        precision = metrics.precision_score(true_labels, binary_predictions)
+        recall = metrics.recall_score(true_labels, binary_predictions)
+        f1_score = metrics.f1_score(true_labels, binary_predictions)
 
-# Compute evaluation metrics and confusion matrix
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
+        # Pass the data, prediction, is_fraudulent flag, ROC curve image, precision, recall, and F1 score to the template
+        return render_template('fraud.html', data=data, prediction=binary_predictions[0], is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image,
+                               precision=precision, recall=recall, f1_score=f1_score)
 
-print("Best Threshold:", best_threshold)
-print("Precision:", precision)
-print("Recall:", recall)
-print("F1 Score:", f1)
-print("Confusion Matrix:")
-print(cm)
-
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-
-# Make predictions on test data
-y_pred_prob = model.predict(X_test_reshaped)
-
-# Threshold tuning
-thresholds = np.arange(0.1, 1.0, 0.1)
-best_f1_score = 0
-best_threshold = 0
-
-for threshold in thresholds:
-    y_pred = (y_pred_prob > threshold).astype(int)
-    f1 = f1_score(y_test, y_pred)
-
-    if f1 > best_f1_score:
-        best_f1_score = f1
-        best_threshold = threshold
-
-# Apply best threshold to obtain final predictions
-y_pred = (y_pred_prob > best_threshold).astype(int)
-
-# Compute evaluation metrics and confusion matrix
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred)
-cm = confusion_matrix(y_test, y_pred)
-
-print("Best Threshold:", best_threshold)
-print("Precision:", precision)
-print("Recall:", recall)
-print("F1 Score:", f1)
-print("Confusion Matrix:")
-print(cm)
-
-import pickle
-# Save the trained model using pickle
-with open('modelnew.pkl', 'wb') as file:
-    pickle.dump(modelnew, file)
-
-import pandas as pd
+    return render_template('fraud.html')

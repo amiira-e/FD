@@ -14,16 +14,19 @@
     <h2>Results:</h2>
     <table>
         <tr>
-            <th>Prediction</th>
-            <th>True Value</th>
+          <th>Prediction</th>
+          <th>True Value</th>
+          <th>Result</th>
         </tr>
         {% for result in results[:10] %}
         <tr>
-            <td>{{ result[0] }}</td>
-            <td>{{ result[1] }}</td>
+          <td>{{ result[0] }}</td>
+          <td>{{ result[1] }}</td>
+          <td>{% if result[0] == result[1] %}&#10004;{% else %}&#10008;{% endif %}</td>
         </tr>
         {% endfor %}
-    </table>
+      </table>
+      
     {% endif %}
     
     {% if metrics %}
