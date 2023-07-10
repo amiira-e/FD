@@ -1,32 +1,47 @@
-/* body {
-  display: flex;
-  align-items: center; /* Center vertically 
-  justify-content: center; /* Center horizontally 
-  background-image: url("../static/resultbackground.jpg");
-  background-repeat: no-repeat;
-  background-size: 100%;
+body
+{
+  background-image: url("../static/a.png");
 }
 
-.container {
+/* .container {
   display: flex;
   height: 100vh; 
   text-align: center;
-}
-
+} */
+/* 
 .task {
   flex: 1;
+} */
+
+.box p.task-description {
+  margin-top: 40px;
+  font-size: 15px;
+  color: #ffffff;
+  font-family: monospace;
+  text-align: center;
+  padding-right: -220px;
+  /* margin-left: 20px; */
+}
+
+h1{
+  color: #ffffff;
+  font-size: 24px;
 }
 
 .task-link {
-  display: block;
+  display: inline;
   text-decoration: none;
   text-align: center;
+  width: 15%;
   padding: 10px;
   background-color: #f0f0f0;
   margin-right: 10px;
   border-radius: 5px;
   font-size: 15px;
   transition: background-color 0.3s;
+  background-color: #c1b9b9; /* Add background color to the box */
+  color: #000000; /* Set text color */
+  border: 2px solid #e8a4cc; /* Add border */
 }
 
 .task-link:hover {
@@ -35,10 +50,10 @@
 
 .task-description {
   margin-top: 20px;
-  font-size: 18px;
+  font-size: 15px;
   color: #ffffff;
-
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family:monospace;
+  text-align:left;
 } */
 
 h1{
@@ -64,3 +79,137 @@ h1{
 .back-button:hover {
     background-color: #e1f98b;
 }
+
+.box {
+  position: relative;
+  /* Add other box styles as needed */
+  text-align: center;
+}
+
+.box img {
+  width: 20%;
+  height: auto;
+  display: inline;
+  border-radius: 10px;
+
+  /* Add other image styles as needed */
+}
+
+.box .task-link span {
+  margin-left: 10px;
+} 
+
+/* .box {
+  flex-basis: 20%; /* Each box occupies 45% width in the flex container */
+  /* border: 1px solid #d28a8a; Add a border around each box */
+  /* padding: 10px; Add some padding within each box 
+
+} */
+
+.box .task-description {
+  /* Add styles for the description text */
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  /* padding-right: 700px; */
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px; /* Add some spacing between task boxes */
+  border: 1px solid #000; /* Add a border around the flex container */
+  padding: 10px; /* Add some padding within the flex container */
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border: 1px solid #000; /* Add a border around the flex container */
+  padding: 10px; /* Add some padding within the flex container */
+}
+
+.box {
+  flex-basis: 45%; /* Each box occupies 45% width in the flex container */
+  /* border: 1px solid #d28a8a; Add a border around each box */
+  padding: 10px; /* Add some padding within each box */
+}
+
+/* 
+        .container {
+            display: flex;
+            text-align: center;
+            flex-direction: column; 
+        }
+        
+        .task {
+            flex: 1;
+        }
+        
+        .task-link {
+            display: inline;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            background-color: #e3a7a7;
+            margin-right: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            color: black;
+            max-width: 200px; 
+        }
+         */
+       
+/*         
+        .task-description {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        } */
+
+
+        /*<!-- <body>
+    <a href="{{ url_for('home') }}" class="back-button">Back</a>
+    <br><br><br>
+    <div class="container">
+        <h1>Choose a task</h1>
+        <div class="task">
+            <a href="{{ url_for('monitor') }}" class="task-link">
+                <i class="fas fa-chart-line"></i>
+                Monitor customers' behaviour
+            </a>
+            <p class="task-description">This option allows you to monitor customers' behavior.
+                You can gain an initial overview of each customer's past transaction history <br> to obtain insights into the frequency of both fraudulent and non-fraudulent cases associated with each customer.</p>
+        </div>
+        <br>   <br>
+        <div class="task">
+            <a href="{{ url_for('fraud') }}" class="task-link">
+                <i class="fas fa-search"></i>
+                Fraud detection
+            </a>
+            <p class="task-description">This functionality enables the detection of fraudulent transactions. By providing the necessary input features, advanced AI models such as LSTM (Long Short-Term Memory) and <br>
+                Hybrid CNN-LSTM (Convolutional Neural Network - Long Short-Term Memory) are employed to accurately identify instances of fraud.</p>
+        </div>
+        <br> <br>
+
+        <div class="task">
+            <a href="{{ url_for('upload') }}" class="task-link">
+                <i class="fas fa-search"></i>
+                Fraud detection via CSV
+            </a>
+
+        </div>
+        <br>   <br>
+        <div class="task">
+            <a href="{{ url_for('prediction') }}" class="task-link">
+                <i class="fas fa-exclamation-triangle"></i>
+                Anomaly detection
+            </a>
+            <p class="task-description">This option allows you to detect anomalies in transactions.</p>
+        </div>
+    </div>
+</body> -->*/

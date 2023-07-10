@@ -1,6 +1,8 @@
 body {
-  background-color: black;
-  color: white;
+  background-image: url("../static/a.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  color: aliceblue;
 }
 
 h1 {
@@ -44,9 +46,9 @@ h2 {
   margin-top: 20px;
 }
 
-body {
+/* body {
   align-items: center; 
   background-image: url("../static/resultbackground.jpg");
   background-repeat: no-repeat;
   background-size: 100%;
-}
+} */

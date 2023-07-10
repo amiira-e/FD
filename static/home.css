@@ -8,7 +8,19 @@ body {
   display: flex;
   background-image: url("../static/a.png");
 }
-
+h2{
+  font-family:Verdana, Geneva, Tahoma, sans-serif;/* Set the desired font family */
+  font-size: 24px; /* Set the desired font size */
+  color: #89e2ec;
+ 
+}
+.flex-item p {
+  font-family:monospace;/* Set the desired font family */
+  font-size: 18px; /* Set the desired font size */
+  color: #eff8f9; /* Set the desired font color */
+  line-height: 1.5; /* Set the desired line height */
+  font-weight: bold;
+}
 .image-container {
   display: flex;
   justify-content: center;
@@ -20,19 +32,9 @@ body {
   justify-content: center;
   padding: 0px;
   /* border: 2px solid #000; */
-  margin-top: 150px; /* Adjust the margin-bottom value as desired */
+  margin-top: 180px; /* Adjust the margin-bottom value as desired moves the whole blue box down */
 }
 
-/* CSS styles for the flex items */
-/* .flex-container div {
-  flex: 1;
-  text-align: center;
-  padding: 20px;
-  color: white;
-  justify-content: center;
-  align-items: center;
-  
-} */
 /* CSS styles for the flex items */
 .flex-container div {
   flex: 1;
@@ -69,7 +71,7 @@ body {
 .flex-container img {
   display: inline;
   width: 250px;
-  height: 250px;
+  height: 220px;
   object-fit: cover;
   border-radius: 20%;
   /* background-color: #f1f1f1; Background color */
@@ -105,33 +107,36 @@ body {
   display: inline-block; /* Ensure the image is treated as a block element */
 }
 
-
 .flex-container2-buttons {
   display: flex;
   justify-content: center;
   margin-top: 70px; /* Add some top margin to create space between the flex container and the buttons */
 }
 
-
 .image-button {
-  background-color: #f7f7f7;
-  color: #360436;
+  background-color: #000000;
+  color:  #ffffff;
+  font-weight: bold;
   border: none;
   padding: 10px 20px;
   font-size: 16px;
-  font-family: "Arial", sans-serif;
+  font-family:monospace;
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top:-200px;
   text-decoration: none; /* Remove underline */
+  border-bottom: 2px;
+  border: 2px solid #0e8ea5; /* Increase border size and set border color */
+  border-radius: 8px; /* Add border radius */
 }
 
 .image-button:hover {
-  background-color: #d89d26;
+  background-color: rgb(237, 225, 239);
 }
 
 .button-container button {
   margin: 30px 215px; /* Add spacing between buttons */
+  border: #d89d26;
 }
 
 
