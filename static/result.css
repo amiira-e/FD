@@ -44,3 +44,23 @@
 h1{
   color: aliceblue;
 }
+
+.back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #6fafe1;
+  color: #000000;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+  position: absolute;  /* Position element absolutely */
+  top: 10px;  /* Distance from the top edge */
+  left: 10px;  /* Distance from the left edge */
+}
+
+
+.back-button:hover {
+    background-color: #e1f98b;
+}

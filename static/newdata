@@ -1,0 +1,205 @@
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']  # Updated line
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path, filename)
+#         file.save(file_path)
+        
+#         # Perform predictions using the model
+#         binary_predictions, target = predict_from_csv(file_path)
+        
+#         # Compare predictions with target and create a list of results
+#         results = []
+#         for pred, true in zip(binary_predictions, target):
+#             result = 'Fraud' if pred == 1 else 'Not Fraud'
+#             results.append((result, true))
+        
+#         # Return the predictions as a response
+#         return render_template('upload.html', results=results)
+
+#     return render_template('upload.html')
+
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']  # Updated line
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path,filename)
+#         file.save(file_path)
+        
+#         # Perform predictions using the model
+#         predictions = predict_from_csv(file_path)
+        
+#         # Return the predictions as a response
+#         return render_template('upload.html', predictions=predictions)
+
+#     return render_template('upload.html')
+
+
+#1111111111111111111111111111111111111111111111111111111
+# @app.route('/fraud', methods=['GET', 'POST'])
+# def fraud():
+#     if request.method == 'POST':
+#         # Handle the form submission
+#         step = int(request.form['step'])
+#         type = request.form['type']
+#         amount = float(request.form['amount'])
+#         nameOrig = request.form['nameOrig']
+#         oldbalanceOrg = float(request.form['oldbalanceOrg'])
+#         newbalanceOrig = float(request.form['newbalanceOrig'])
+#         newDest = request.form['newDest']
+#         oldbalanceDest = float(request.form['oldbalanceDest'])
+#         newbalanceDest = float(request.form['newbalanceDest'])
+#         isFlaggedFraud = int(request.form['isFlaggedFraud'])
+
+#         # Prepare the input data for prediction
+#         input_data = np.array([[step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, newDest,
+#                                 oldbalanceDest, newbalanceDest, isFlaggedFraud]])
+#         input_data = input_data.astype(np.float32)
+#         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
+
+#         # Make predictions using the model
+#         prediction = model.predict(input_data)[0]
+
+#         # Connect to the SQLite database
+#         connection = sqlite3.connect(db_path)
+#         cursor = connection.cursor()
+
+#         # Execute a query to retrieve data for the given customer name
+#         query = "SELECT * FROM train_data WHERE nameOrig = ?"
+#         cursor.execute(query, (nameOrig,))
+
+#         # Fetch the data from the query result
+#         data = cursor.fetchall()
+
+#         # Close the database connection
+#         cursor.close()
+#         connection.close()
+
+#         # Check if any row has isFraud = 1
+#         is_fraudulent = any(row[11] == 1 for row in data)
+
+#         # Perform the prediction and get the prediction probabilities
+#         prediction_probabilities = model.predict(input_data)[0]
+
+#         # Generate the ROC curve image
+#         roc_curve_image = generate_roc_curve(prediction_probabilities)
+
+#         # Pass the data, prediction, is_fraudulent flag, and ROC curve image to the template
+#         return render_template('fraud.html', data=data, prediction=prediction, is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image)
+
+#     return render_template('fraud.html')
+
+
+# def generate_bar_chart(labels, values):
+#     fig, ax = plt.subplots()
+#     ax.bar(labels, values)
+
+#     # Set chart title and labels
+#     ax.set_title('Transaction Fraud Distribution')
+#     ax.set_xlabel('Transaction Type')
+#     ax.set_ylabel('Count')
+
+#     # Convert the plot to an image
+#     image_stream = io.BytesIO()
+#     plt.savefig(image_stream, format='png')
+#     image_stream.seek(0)
+#     encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+#     plt.close()
+
+#     return 
+
+
+#!11111111111111111111111111
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']  # Updated line
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path, filename)
+#         file.save(file_path)
+        
+#         # Perform predictions using the model
+#         binary_predictions, target = predict_from_csv(file_path)
+        
+#         # Compare predictions with target and create a list of results
+#         results = []
+#         for pred, true in zip(binary_predictions, target):
+#             result = 'Fraud' if pred == 1 else 'Not Fraud'
+#             results.append((result, true))
+        
+#         # Return the predictions as a response
+#         return render_template('upload.html', results=results)
+
+#     return render_template('upload.html')
+
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']  # Updated line
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path,filename)
+#         file.save(file_path)
+        
+#         # Perform predictions using the model
+#         predictions = predict_from_csv(file_path)
+        
+#         # Return the predictions as a response
+#         return render_template('upload.html', predictions=predictions)
+
+#     return render_template('upload.html')
+
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']  # Updated line
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path,filename)
+#         file.save(file_path)
+        
+#         # Perform predictions using the model
+#         predictions, target, metrics = predict_from_csv(file_path)
+        
+#         # Return the predictions and metrics as a response
+#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics)
+
+#     return render_template('upload.html')
+
+# def predict_from_csv(file_path):
+#     # Read the CSV file
+#     data = []
+#     target = []
+#     with open(file_path, 'r') as csvfile:
+#         reader = csv.reader(csvfile)
+#         next(reader)  # Skip the header row
+#         for row in reader:
+#             data.append(row[:-1])  # Exclude the last column (target variable)
+#             target.append(float(row[-1]))  # Convert target variable to numeric type
+
+#     # Prepare the input data for prediction
+#     input_data = np.array(data, dtype=np.float32)
+#     input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
+
+#     # Make predictions using the model
+#     predictions = model.predict(input_data)
+
+#     # Apply threshold and convert predictions to binary values
+#     binary_predictions = (predictions >= 0.5).astype(int)
+
+#     return binary_predictions, target

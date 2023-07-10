@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File</title>
+    <link rel="stylesheet" type="text/css" href="../static/upload.css">
+</head>
+<body>
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+    
+    {% if results %}
+    <h2>Results:</h2>
+    <table>
+        <tr>
+            <th>Prediction</th>
+            <th>True Value</th>
+        </tr>
+        {% for result in results[:10] %}
+        <tr>
+            <td>{{ result[0] }}</td>
+            <td>{{ result[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    
+    {% if metrics %}
+    <h2>Evaluation Metrics:</h2>
+    <p>Precision: {{ metrics.precision }}</p>
+    <p>Recall: {{ metrics.recall }}</p>
+    <p>F1-Score: {{ metrics.f1_score }}</p>
+    {% endif %}
+
+    {% if confusion %}
+    <h2>Confusion Matrix:</h2>
+    <table>
+        <tr>
+            <th></th>
+            <th>Predicted 0</th>
+            <th>Predicted 1</th>
+        </tr>
+        {% for i, row in enumerate(confusion) %}
+        <tr>
+            <th>Actual {{ i }}</th>
+            {% for value in row %}
+            <td>{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>

@@ -55,8 +55,9 @@
         }
     </style>
 </head>
+
 <body>
-    <a href="{{ url_for('prediction') }}" class="back-button">Back</a>
+    <a href="{{ url_for('home') }}" class="back-button">Back</a>
     <div class="container">
         <h1>Choose a task</h1>
         <div class="task">
@@ -75,6 +76,15 @@
             </a>
             <p class="task-description">This functionality enables the detection of fraudulent transactions. By providing the necessary input features, advanced AI models such as LSTM (Long Short-Term Memory) and <br>
                 Hybrid CNN-LSTM (Convolutional Neural Network - Long Short-Term Memory) are employed to accurately identify instances of fraud.</p>
+        </div>
+        <br> <br>
+
+        <div class="task">
+            <a href="{{ url_for('upload') }}" class="task-link">
+                <i class="fas fa-search"></i>
+                Fraud detection via CSV
+            </a>
+
         </div>
         <br>   <br>
         <div class="task">
