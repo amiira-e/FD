@@ -348,3 +348,14 @@ body {
 .back-button:hover {
     background-color: #e1f98b;
 }
+
+.roc-curve-image {
+  display: block;
+  margin: 0 auto;
+  max-width: 35%;
+  height: 30%;
+}
+
+.white-text {
+  color: white;
+}

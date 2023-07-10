@@ -96,11 +96,17 @@
   </table>
 {% endif %}
 
-{% if roc_curve_image %}
+<!-- {% if roc_curve_image %}
   <h2>ROC Curve</h2>
-  <img src="data:image/png;base64,{{ roc_curve_image }}" alt="ROC Curve">
+  <img src="data:image/png;base64,{{ roc_curve_image }}" alt="ROC Curve" class="roc-curve-image">
 {% endif %}
 
+{% if precision is defined and recall is defined and f1_score is defined %}
+  <h2>Evaluation Metrics</h2>
+  <p class="white-text">Precision: {{ precision }}</p>
+  <p class="white-text">Recall: {{ recall }}</p>
+  <p class="white-text">F1 Score: {{ f1_score }}</p>
+{% endif %} -->
 
 </body>
 </html>

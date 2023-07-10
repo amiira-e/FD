@@ -436,8 +436,8 @@ body {
 }
 
 .chart-image {
-  max-width: 400px; /* Adjust the maximum width as needed */
-  height: auto;
+  max-width: 500px; /* Adjust the maximum width as needed */
+  height:300px;
   margin: 0 auto;
 }
 

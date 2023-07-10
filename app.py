@@ -104,6 +104,61 @@ def generate_roc_curve(prediction_probabilities):
 
     return encoded_image
 
+# @app.route('/fraud', methods=['GET', 'POST'])
+# def fraud():
+#     if request.method == 'POST':
+#         # Handle the form submission
+#         step = int(request.form['step'])
+#         type = request.form['type']
+#         amount = float(request.form['amount'])
+#         nameOrig = request.form['nameOrig']
+#         oldbalanceOrg = float(request.form['oldbalanceOrg'])
+#         newbalanceOrig = float(request.form['newbalanceOrig'])
+#         newDest = request.form['newDest']
+#         oldbalanceDest = float(request.form['oldbalanceDest'])
+#         newbalanceDest = float(request.form['newbalanceDest'])
+#         isFlaggedFraud = int(request.form['isFlaggedFraud'])
+
+#         # Prepare the input data for prediction
+#         input_data = np.array([[step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, newDest,
+#                                 oldbalanceDest, newbalanceDest, isFlaggedFraud]])
+#         input_data = input_data.astype(np.float32)
+#         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
+
+#         # Make predictions using the model
+#         prediction = model.predict(input_data)[0]
+
+#         # Connect to the SQLite database
+#         connection = sqlite3.connect(db_path)
+#         cursor = connection.cursor()
+
+#         # Execute a query to retrieve data for the given customer name
+#         query = "SELECT * FROM train_data WHERE nameOrig = ?"
+#         cursor.execute(query, (nameOrig,))
+
+#         # Fetch the data from the query result
+#         data = cursor.fetchall()
+
+#         # Close the database connection
+#         cursor.close()
+#         connection.close()
+
+#         # Check if any row has isFraud = 1
+#         is_fraudulent = any(row[11] == 1 for row in data)
+
+#         # Perform the prediction and get the prediction probabilities
+#         prediction_probabilities = model.predict(input_data)[0]
+
+#         # Generate the ROC curve image
+#         roc_curve_image = generate_roc_curve(prediction_probabilities)
+
+#         # Pass the data, prediction, is_fraudulent flag, and ROC curve image to the template
+#         return render_template('fraud.html', data=data, prediction=prediction, is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image)
+
+#     return render_template('fraud.html')
+
+from sklearn import metrics
+
 @app.route('/fraud', methods=['GET', 'POST'])
 def fraud():
     if request.method == 'POST':
@@ -152,23 +207,60 @@ def fraud():
         # Generate the ROC curve image
         roc_curve_image = generate_roc_curve(prediction_probabilities)
 
-        # Pass the data, prediction, is_fraudulent flag, and ROC curve image to the template
-        return render_template('fraud.html', data=data, prediction=prediction, is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image)
+        # Convert the true labels to binary values (0 and 1)
+        true_labels = [row[11] for row in data]
+
+        # Convert prediction probabilities to binary predictions using a threshold
+        threshold = 0.7  # Adjust the threshold as per your requirement
+        binary_predictions = [1 if prob >= threshold else 0 for prob in prediction_probabilities]
+
+        # Calculate precision, recall, and F1 score
+        precision = metrics.precision_score(true_labels, binary_predictions)
+        recall = metrics.recall_score(true_labels, binary_predictions)
+        f1_score = metrics.f1_score(true_labels, binary_predictions)
+
+        # Pass the data, prediction, is_fraudulent flag, ROC curve image, precision, recall, and F1 score to the template
+        return render_template('fraud.html', data=data, prediction=binary_predictions[0], is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image,
+                               precision=precision, recall=recall, f1_score=f1_score)
 
     return render_template('fraud.html')
+
+# def generate_bar_chart(labels, values):
+#     fig, ax = plt.subplots()
+#     ax.bar(labels, values)
+
+#     # Set chart title and labels
+#     ax.set_title('Transaction Fraud Distribution')
+#     ax.set_xlabel('Transaction Type')
+#     ax.set_ylabel('Count')
+
+#     # Convert the plot to an image
+#     image_stream = io.BytesIO()
+#     plt.savefig(image_stream, format='png')
+#     image_stream.seek(0)
+#     encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+#     plt.close()
+
+#     return encoded_image
+
+import matplotlib.pyplot as plt
 
 def generate_bar_chart(labels, values):
     fig, ax = plt.subplots()
     ax.bar(labels, values)
 
     # Set chart title and labels
-    ax.set_title('Transaction Fraud Distribution')
-    ax.set_xlabel('Transaction Type')
-    ax.set_ylabel('Count')
+    ax.set_title('Transaction Fraud Distribution', color='white')  # Set the title color to white
+    ax.set_xlabel('Transaction Type', color='white')  # Set the x-label color to white
+    ax.set_ylabel('Count', color='white')  # Set the y-label color to white
+    ax.set_facecolor('none')  # Remove the white background
+
+    # Set the color of tick labels to white
+    ax.tick_params(colors='white')
 
     # Convert the plot to an image
     image_stream = io.BytesIO()
-    plt.savefig(image_stream, format='png')
+    plt.savefig(image_stream, format='png', transparent=True)  # Save the plot with transparent background
     image_stream.seek(0)
     encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
     plt.close()
@@ -179,25 +271,7 @@ def generate_bar_chart(labels, values):
 # def monitor():
 #     if request.method == 'POST':
 #         # Handle the form submission
-#         step = int(request.form['step'])
-#         type = request.form['type']
-#         amount = float(request.form['amount'])
 #         nameOrig = request.form['nameOrig']
-#         oldbalanceOrg = float(request.form['oldbalanceOrg'])
-#         newbalanceOrig = float(request.form['newbalanceOrig'])
-#         newDest = request.form['newDest']
-#         oldbalanceDest = float(request.form['oldbalanceDest'])
-#         newbalanceDest = float(request.form['newbalanceDest'])
-#         isFlaggedFraud = int(request.form['isFlaggedFraud'])
-
-#         # Prepare the input data for prediction
-#         input_data = np.array([[step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, newDest,
-#                                 oldbalanceDest, newbalanceDest, isFlaggedFraud]])
-#         input_data = input_data.astype(np.float32)
-#         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
-
-#         # Make predictions using the model
-#         prediction = model.predict(input_data)[0]
 
 #         # Connect to the SQLite database
 #         connection = sqlite3.connect(db_path)
@@ -217,11 +291,34 @@ def generate_bar_chart(labels, values):
 #         # Check if any row has isFraud = 1
 #         is_fraudulent = any(row[11] == 1 for row in data)
 
-#         # Perform the prediction and get the prediction probabilities
-#         prediction_probabilities = model.predict_proba(input_data)[0]
+#         # Generate the bar chart
+#         labels = ['Fraudulent', 'Non-Fraudulent']
+#         values = [0, 0]  # Initialize with 0 occurrences
+#         for row in data:
+#             if row[11] == 1:
+#                 values[0] += 1
+#             elif row[11] == 0:
+#                 values[1] += 1
 
-#         # Generate the ROC curve image
-#         roc_curve_image = generate_roc_curve(prediction_probabilities)
+#         bar_chart = generate_bar_chart(labels, values)
+
+#         # Generate the pie chart
+#         transaction_types = [row[8] for row in data]
+#         type_counts = {}
+#         for transaction_type in transaction_types:
+#             if transaction_type in type_counts:
+#                 type_counts[transaction_type] += 1
+#             else:
+#                 type_counts[transaction_type] = 1
+
+#         pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
+
+#         # Pass the data, is_fraudulent flag, bar chart, and pie chart to the template
+#         return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
+#                                bar_chart=bar_chart, pie_chart=pie_chart)
+
+#         # # Pass the data, is_fraudulent flag, and bar chart to the template
+#         # return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent, bar_chart=bar_chart)
 
 #     else:
 #         # Handle the GET request (initial page load and customer search)
@@ -247,13 +344,25 @@ def generate_bar_chart(labels, values):
 #             # Close the database connection
 #             cursor.close()
 #             connection.close()
-            
+
 #             # Check if any row has isFraud = 1
 #             is_fraudulent = any(row[11] == 1 for row in data)
 
-#             # Pass the data, is_fraudulent flag, and search_type/search_value to the template
+#             # Generate the bar chart
+#             labels = ['Fraudulent', 'Non-Fraudulent']
+#             values = [0, 0]  # Initialize with 0 occurrences
+#             for row in data:
+#                 if row[11] == 1:
+#                     values[0] += 1
+#                 elif row[11] == 0:
+#                     values[1] += 1
+
+#             bar_chart = generate_bar_chart(labels, values)
+
+
+#             # Pass the data, is_fraudulent flag, search_type, search_value, and bar chart to the template
 #             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-#                                    searchType=search_type, searchValue=search_value)
+#                                    searchType=search_type, searchValue=search_value, bar_chart=bar_chart)
 
 #         # Render the empty form when it's a GET request without searchType and searchValue
 #         return render_template('monitor.html')
@@ -293,9 +402,21 @@ def monitor():
 
         bar_chart = generate_bar_chart(labels, values)
 
-        # Pass the data, is_fraudulent flag, and bar chart to the template
-        return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent, bar_chart=bar_chart)
+        # Generate the pie chart
+        transaction_types = [row[8] for row in data]
+        type_counts = {}
+        for transaction_type in transaction_types:
+            if transaction_type in type_counts:
+                type_counts[transaction_type] += 1
+            else:
+                type_counts[transaction_type] = 1
 
+        pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
+
+        # Pass the data, is_fraudulent flag, bar chart, and pie chart to the template
+        return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
+                               bar_chart=bar_chart, pie_chart=pie_chart)
+    
     else:
         # Handle the GET request (initial page load and customer search)
         search_type = request.args.get('searchType')
@@ -335,12 +456,68 @@ def monitor():
 
             bar_chart = generate_bar_chart(labels, values)
 
-            # Pass the data, is_fraudulent flag, search_type, search_value, and bar chart to the template
+            # Generate the pie chart
+            transaction_types = [row[8] for row in data]
+            type_counts = {}
+            for transaction_type in transaction_types:
+                if transaction_type in type_counts:
+                    type_counts[transaction_type] += 1
+                else:
+                    type_counts[transaction_type] = 1
+
+            pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
+
+            # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-                                   searchType=search_type, searchValue=search_value, bar_chart=bar_chart)
+                                   searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
 
         # Render the empty form when it's a GET request without searchType and searchValue
         return render_template('monitor.html')
+
+# def generate_pie_chart(labels, values):
+#     # Create a pie chart
+#     fig, ax = plt.subplots()
+#     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+#     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+
+#     # Convert the plot to an image
+#     image_stream = io.BytesIO()
+#     plt.savefig(image_stream, format='png')
+#     image_stream.seek(0)
+#     encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+#     plt.close()
+
+#     return encoded_image
+
+import matplotlib.pyplot as plt
+
+import matplotlib.pyplot as plt
+
+def generate_pie_chart(labels, values):
+    # Create a pie chart with custom colors and explode one or more slices
+    colors = ['#A63922', '#106675', '#4F0B73', '#ffcc99']  # Custom colors for slices
+
+    fig, ax = plt.subplots()
+    ax.pie(values, labels=labels, colors=colors,autopct='%1.1f%%', startangle=90)
+
+    # Customize additional properties of the pie chart
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    ax.set_title('Transaction Type Distribution', color='white')  # Set the title of the pie chart and make it white
+    ax.set_facecolor('none')  # Remove the white background
+
+    # Set the text color of labels and percentages to white
+    for text in ax.texts:
+        text.set_color('white')
+
+    # Convert the plot to an image
+    image_stream = io.BytesIO()
+    plt.savefig(image_stream, format='png', transparent=True)  # Save the plot with transparent background
+    image_stream.seek(0)
+    encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+    plt.close()
+
+    return encoded_image
+
 
 @app.route('/result', methods=['GET', 'POST'])
 def show_data():

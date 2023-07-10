@@ -217,5 +217,17 @@
     </div>
     {% endif %}
 
+    <br><br>
+    
+    {% if pie_chart %}
+    <h2>
+        <i class="fas fa-chart-pie"></i>
+        Transaction Type Distribution
+    </h2>
+    <div class="chart-container">
+        <img src="data:image/png;base64,{{ pie_chart }}" alt="Transaction Type Distribution" class="chart-image" />
+    </div>
+    {% endif %}
+
 </body>
 </html>
