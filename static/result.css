@@ -1,23 +1,13 @@
 body
 {
   background-image: url("../static/a.png");
+  background-size:cover;
 }
-
-/* .container {
-  display: flex;
-  height: 100vh; 
-  text-align: center;
-} */
-/* 
-.task {
-  flex: 1;
-} */
-
 .box p.task-description {
   margin-top: 40px;
   font-size: 15px;
-  color: #ffffff;
-  font-family: monospace;
+  color: #000000;
+  font-family:Arial, Helvetica, sans-serif;
   text-align: center;
   padding-right: -220px;
   /* margin-left: 20px; */
@@ -28,33 +18,10 @@ h1{
   font-size: 24px;
 }
 
-.task-link {
-  display: inline;
-  text-decoration: none;
-  text-align: center;
-  width: 15%;
-  padding: 10px;
-  background-color: #f0f0f0;
-  margin-right: 10px;
-  border-radius: 5px;
-  font-size: 15px;
-  transition: background-color 0.3s;
-  background-color: #c1b9b9; /* Add background color to the box */
-  color: #000000; /* Set text color */
-  border: 2px solid #e8a4cc; /* Add border */
-}
-
 .task-link:hover {
   background-color: #ccc;
 }
 
-.task-description {
-  margin-top: 20px;
-  font-size: 15px;
-  color: #ffffff;
-  font-family:monospace;
-  text-align:left;
-} */
 
 h1{
   color: aliceblue;
@@ -63,7 +30,7 @@ h1{
 .back-button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #6fafe1;
+  background-color: #e0e4e8;
   color: #000000;
   text-decoration: none;
   border-radius: 5px;
@@ -87,7 +54,7 @@ h1{
 }
 
 .box img {
-  width: 20%;
+  width: 30%;
   height: auto;
   display: inline;
   border-radius: 10px;
@@ -99,13 +66,6 @@ h1{
   margin-left: 10px;
 } 
 
-/* .box {
-  flex-basis: 20%; /* Each box occupies 45% width in the flex container */
-  /* border: 1px solid #d28a8a; Add a border around each box */
-  /* padding: 10px; Add some padding within each box 
-
-} */
-
 .box .task-description {
   /* Add styles for the description text */
   margin-top: 10px;
@@ -114,102 +74,69 @@ h1{
   /* padding-right: 700px; */
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px; /* Add some spacing between task boxes */
-  border: 1px solid #000; /* Add a border around the flex container */
-  padding: 10px; /* Add some padding within the flex container */
-}
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  border: 1px solid #000; /* Add a border around the flex container */
-  padding: 10px; /* Add some padding within the flex container */
-}
-
 .box {
   flex-basis: 45%; /* Each box occupies 45% width in the flex container */
   /* border: 1px solid #d28a8a; Add a border around each box */
   padding: 10px; /* Add some padding within each box */
 }
 
-/* 
-        .container {
-            display: flex;
-            text-align: center;
-            flex-direction: column; 
-        }
-        
-        .task {
-            flex: 1;
-        }
-        
-        .task-link {
-            display: inline;
-            text-decoration: none;
-            text-align: center;
-            padding: 10px;
-            background-color: #e3a7a7;
-            margin-right: 10px;
-            border-radius: 5px;
-            font-size: 18px;
-            transition: background-color 0.3s;
-            font-weight: bold;
-            color: black;
-            max-width: 200px; 
-        }
-         */
-       
-/*         
-        .task-description {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #ffffff;
-            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        } */
+body {
+  background-image: url("../static/a.png");
+  background-size: cover;
+}
 
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* border: 1px solid #000; Add a border around the flex container */
+  padding: 10px; /* Add some padding within the flex container */
+}
 
-        /*<!-- <body>
-    <a href="{{ url_for('home') }}" class="back-button">Back</a>
-    <br><br><br>
-    <div class="container">
-        <h1>Choose a task</h1>
-        <div class="task">
-            <a href="{{ url_for('monitor') }}" class="task-link">
-                <i class="fas fa-chart-line"></i>
-                Monitor customers' behaviour
-            </a>
-            <p class="task-description">This option allows you to monitor customers' behavior.
-                You can gain an initial overview of each customer's past transaction history <br> to obtain insights into the frequency of both fraudulent and non-fraudulent cases associated with each customer.</p>
-        </div>
-        <br>   <br>
-        <div class="task">
-            <a href="{{ url_for('fraud') }}" class="task-link">
-                <i class="fas fa-search"></i>
-                Fraud detection
-            </a>
-            <p class="task-description">This functionality enables the detection of fraudulent transactions. By providing the necessary input features, advanced AI models such as LSTM (Long Short-Term Memory) and <br>
-                Hybrid CNN-LSTM (Convolutional Neural Network - Long Short-Term Memory) are employed to accurately identify instances of fraud.</p>
-        </div>
-        <br> <br>
+.box {
+  flex-basis: 45%; /* Each box occupies 45% width in the flex container */
+  padding: 10px; /* Add some padding within each box */
+  color: #000000;
+}
 
-        <div class="task">
-            <a href="{{ url_for('upload') }}" class="task-link">
-                <i class="fas fa-search"></i>
-                Fraud detection via CSV
-            </a>
+.task-link {
+  display: inline;
+  text-decoration: none;
+  text-align: center;
+  width: 15%;
+  padding: 10px;
+  background-color: #f0f0f0;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  transition: background-color 0.3s;
+  background-color: #c1b9b9; /* Add background color to the box */
+  color: #000000; /* Set text color  */
+  border: 2px solid #e8a4cc; /* Add border */
+}
 
-        </div>
-        <br>   <br>
-        <div class="task">
-            <a href="{{ url_for('prediction') }}" class="task-link">
-                <i class="fas fa-exclamation-triangle"></i>
-                Anomaly detection
-            </a>
-            <p class="task-description">This option allows you to detect anomalies in transactions.</p>
-        </div>
-    </div>
-</body> -->*/
+.task-description {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #ffffff;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.special-box img {
+  width: 32%; /* Set the desired width for the image */
+  height: 40%; /* Maintain the aspect ratio */
+  border-radius: 5px; /* Add border radius if desired */
+}
+
+.box {
+  background-color:rgb(26, 106, 133); /* Set the desired background color for the first box */
+}
+
+.special-box  {
+  background-color:  rgb(26, 106, 133); /* Set the desired background color for the second box */
+}
+
+#myDiv img {
+  width: 20%; /* Adjust the percentage as needed */
+  height: 33%; /* To maintain the aspect ratio */
+}

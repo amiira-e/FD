@@ -5,6 +5,18 @@ body {
   color: aliceblue;
 }
 
+.back-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e0e4e8;
+  color: #000000;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
 h1 {
   color: white;
 }
@@ -16,7 +28,12 @@ form {
 table {
   width: 50%;
   border-collapse: collapse;
-  margin: 0 auto;
+  /* margin: 0 auto; */ /*cause the table to center */
+  text-align: center;
+  color: #000000;
+  font-weight: bolder;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
 }
 
@@ -24,15 +41,26 @@ th, td {
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid white;
+  text-align: center;
 }
 
 th {
-  background-color: #333;
+  background-color: #000000;
+  color: #ffffff;
+  font-weight: bolder;
+  text-align: center;
 }
 
 tr:nth-child(even) {
-  background-color: #555;
+  background-color: #8ef9ff;
+  text-align: center;
 }
+
+tr:nth-child(odd) {
+  color: #ccc;
+  text-align: center;
+}
+
 
 tr:hover {
   background-color: #777;
@@ -44,11 +72,36 @@ p {
 
 h2 {
   margin-top: 20px;
+  padding-top: 20px;
+  font-size:18px;
+  font-family:Arial, Helvetica, sans-serif;
+  font-style: italic;
 }
 
-/* body {
-  align-items: center; 
-  background-image: url("../static/resultbackground.jpg");
-  background-repeat: no-repeat;
-  background-size: 100%;
-} */
+/* Custom styles for the Choose File button */
+input[type="file"] {
+  background-color: #eaf2f8;
+  color: #333;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Custom styles for the Upload button */
+input[type="submit"] {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+input[type="submit"]:focus {
+  background-color: #337ab7;
+  color: #fff;
+  /* Add any other desired hover/focus styles here */
+  outline: none; /* Remove the default focus outline if desired */
+}

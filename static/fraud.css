@@ -1,9 +1,9 @@
-body {
-
-    background-color: #000000;
-    background-repeat: no-repeat;
-    background-size: 100%;
-  }
+body
+{
+  background-image: url("../static/a.png");
+  background-size:cover;
+}
+  
   
   .sidenav .sidenav-title {
     /* Styles for the "Choose a task" text */
@@ -65,9 +65,10 @@ body {
   
   
   h1 {
-      color: rgb(72, 191, 147);
-      font-size: 18px;
-      font-weight: bold;
+      color: rgb(203, 244, 230);
+      font-size: 22px;
+      font-weight: bolder;
+      font-style: italic;
       font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
       text-align: center; /* Add this line to center the h1 element */
   }
@@ -76,8 +77,9 @@ body {
     color: rgb(244, 250, 228);
     text-align: center;
     /* font-family:  Geneva; */
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 24px;
+    font-weight: bolder;
+    font-style: italic;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
   
@@ -119,22 +121,6 @@ body {
       color: rgb(0, 0, 0);
   }
   
-  /* input[type="submit"] {
-   
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #000000;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    font-size: 12px;
-    font-family: Verdana, Geneva, sans-serif;
-  } */
-  
   select[name="searchType"] {
     font-size: 12px;
     font-family: Verdana, Geneva, sans-serif;
@@ -167,6 +153,7 @@ body {
   form.form1 {
       /* background-color:  #6fafe1; */
       background-image: url("../static/sidenav.jpg");
+      background-size: 100%;
       padding: 20px;
       border-radius: 5px;
       border: 2px solid #8b96f9; /*Add border color*/
@@ -175,7 +162,8 @@ body {
         form.form1 {
       /* background-color:  #6fafe1; */
       background-image: url("../static/sidenav.jpg");
-      background-size: cover; 
+      background-size: no-repeat; 
+      background-size: 100%;
       padding: 20px;
       border-radius: 5px;
       border: 2px solid #8b96f9; /*Add border color*/
@@ -197,16 +185,18 @@ body {
   }
   
   form.form2 {
-    background-image: url("../static/sidenav.jpg");
+    background-image: url("../static/form.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     padding: 20px;
     border-radius: 5px;
-    border: 2px solid #8b96f9; /*Add border color*/
+    /* border: 2px solid #8b96f9; Add border color */
     margin: 0 auto; 
     width:500px;
     text-align: center; /* Add this line to center the form's contents */
     padding-top: 40px; /*box height*/
     margin-top: 1%;
-    box-shadow: 0 0 5px rgba(191, 136, 136, 0.3);
+    /* box-shadow: 0 0 5px rgba(191, 136, 136, 0.3); */
     color: #ffffff; /* Add this line to set the text color */
     height: 350px;
   }
@@ -240,23 +230,6 @@ body {
       color: #000000;
   }
   
-  /*detect fraud button*/
-  /* input[type="submit"] {
-    
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #5945c9; 
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    font-size: 12px;
-    font-family: Verdana, Geneva, sans-serif;
-  } */
-  
   input[type="submit"]:hover {
     background-color: #d4eaaf; /* Specify your desired background color on hover */
   }
@@ -281,23 +254,22 @@ body {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #5945c9; /* Specify your desired background color */
-    color: white;
-    font-weight: bold;
+    background-color: #eeebff; /* Specify your desired background color */
+    color: rgb(0, 0, 0);
+    font-weight: bolder;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
+    border: 2px;
+    border-color: #d7d959;
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 10px;
-    font-size: 12px;
-    font-family: Verdana, Geneva, sans-serif;
   }
   
   .loading-message {
     display: none; /* Initially hide the loading message */
     font-size: 16px;
     color: #ffffff;
-    /* Add any additional styles you want for the loading message */
-    /* For example: */
     text-align: center;
     margin-top: 10px;
     padding: 5px;
@@ -310,33 +282,37 @@ body {
     margin: 20px auto; /* Center the table horizontally with auto margin */
     justify-content: center;
     text-align: center;
+    font-size: 16px;
+    font-family: monospace;
+    color: #000000;
   }
   
   table th, table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-    color: white; /* Set the text color to white */
+    color: rgb(250, 250, 250); /* Set the text color to white */
 
   }
   
   table th {
-    background-color: #4c89af;
+    background-color: #1a0116;
   }
   
   table tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #ebb6b6;
   }
   
   table tr:hover {
-    background-color: #ddd;
+    background-color: #dcacac;
+   
   }
   
   /*Back button CSS*/
   .back-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #6fafe1;
+    background-color: #e0e4e8;
     color: #000000;
     text-decoration: none;
     border-radius: 5px;

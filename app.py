@@ -28,7 +28,7 @@ model_path = os.path.join(os.path.dirname(__file__), 'static', 'modelnew.pkl')
 
 # Load the trained model
 with open(model_path, 'rb') as f:
-    model = pickle.load(f)
+    modelnew = pickle.load(f)
 
 # model = tf.keras.models.load_model(model_path)
 
@@ -211,7 +211,7 @@ def fraud():
         connection.close()
 
         # Check if any row has isFraud = 1
-        is_fraudulent = any(row[11] == 1 for row in data)
+        # is_fraudulent = any(row[11] == 1 for row in data)
 
         # Perform the prediction and get the prediction probabilities
         prediction_probabilities = model.predict(input_data)[0]
@@ -223,9 +223,14 @@ def fraud():
         true_labels = [row[11] for row in data]
 
         # Convert prediction probabilities to binary predictions using a threshold
-        threshold = 0.7  # Adjust the threshold as per your requirement
+        threshold = 0.5  # Adjust the threshold as per your requirement  #0.000000000001 
         binary_predictions = [1 if prob >= threshold else 0 for prob in prediction_probabilities]
 
+        # Set is_fraudulent to True if binary_predictions is equal to 1
+        if 1 in binary_predictions:
+            is_fraudulent = True
+        else:
+            is_fraudulent = False
         # Calculate precision, recall, and F1 score
         precision = metrics.precision_score(true_labels, binary_predictions)
         recall = metrics.recall_score(true_labels, binary_predictions)
@@ -236,7 +241,6 @@ def fraud():
                                precision=precision, recall=recall, f1_score=f1_score)
 
     return render_template('fraud.html')
-
 
 import matplotlib.pyplot as plt
 
@@ -478,6 +482,13 @@ def show_data():
 
 import csv
 from werkzeug.utils import secure_filename
+from sklearn.metrics import confusion_matrix
+
+# Load CNN-LSTM model
+model_path_new = os.path.join(os.path.dirname(__file__), 'static', 'cnnlstm.pkl')
+
+with open(model_path_new, 'rb') as f:
+    cnnlstm = pickle.load(f)
 
 # @app.route('/upload', methods=['GET', 'POST'])
 # def upload():
@@ -491,12 +502,14 @@ from werkzeug.utils import secure_filename
 #         file.save(file_path)
         
 #         # Perform predictions and calculate metrics using the model
-#         predictions, target, metrics = predict_and_calculate_metrics(file_path)
+#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path)
         
-#         # Return the predictions and metrics as a response
-#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics)
+#         # Return the predictions, metrics, and confusion matrix as a response
+#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
 
 #     return render_template('upload.html')
+
+# # Good: fraud_data and predictions >= 0.5
 
 # def predict_and_calculate_metrics(file_path):
 #     # Read the CSV file
@@ -517,12 +530,15 @@ from werkzeug.utils import secure_filename
 #     predictions = model.predict(input_data)
 
 #     # Apply threshold and convert predictions to binary values
-#     binary_predictions = (predictions >=  0.000082354).astype(int) #0.0000082354
+#     binary_predictions = (predictions >= 0.4).astype(int) #0.0000082354  #predictions >= 0.5 predictions >= 0.6
 
 #     # Calculate evaluation metrics
 #     precision = precision_score(target, binary_predictions)
 #     recall = recall_score(target, binary_predictions)
 #     f1 = f1_score(target, binary_predictions)
+
+#     # Calculate confusion matrix
+#     confusion = confusion_matrix(target, binary_predictions).tolist()
 
 #     metrics = {
 #         'precision': precision,
@@ -530,32 +546,118 @@ from werkzeug.utils import secure_filename
 #         'f1_score': f1
 #     }
 
-#     return binary_predictions, target, metrics
+#     return binary_predictions, target, metrics, confusion
 
-from sklearn.metrics import confusion_matrix
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
+# Specify the paths to the model files
+model_path_new = os.path.join(os.getcwd(), 'static', 'cnnlstm.pkl')
+model_path = os.path.join(os.getcwd(), 'static', 'modelnew.pkl')
+
+# Load the trained model
+with open(model_path_new, 'rb') as f:
+    cnnlstm= pickle.load(f)
+
+# Load the trained model
+with open(model_path, 'rb') as f:
+    modelnew = pickle.load(f)
+
+# Define your route for the page containing the prediction results
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         # Get the uploaded file
         file = request.files['file']
-        
+
+        # Determine the selected model
+        selected_model = request.form.get('selected_model')
+
+        # Perform predictions and calculate metrics using the selected model
+        if selected_model == 'modelnew':
+            model = modelnew
+        elif selected_model == 'cnnlstm':
+            model = cnnlstm
+        else:
+            return 'Invalid model selection'
+
         # Save the file to a secure location
         filename = secure_filename(file.filename)
-        file_path = os.path.join(app.root_path, filename)
+        file_path = os.path.join(app.root_path, 'static', filename)
         file.save(file_path)
-        
-        # Perform predictions and calculate metrics using the model
-        predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path)
-        
+
+        predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
+
         # Return the predictions, metrics, and confusion matrix as a response
         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
 
     return render_template('upload.html')
 
+
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path, 'static', filename)
+        
+#         file.save(file_path)
+        
+#         # Print the file path to check if it's correct
+#         print("File saved at:", file_path)
+        
+#         # Determine the selected model
+#         selected_model = request.form.get('selected_model')
+
+#         # Perform predictions and calculate metrics using the selected model
+#         if selected_model == 'modelnew':
+#             model = modelnew
+#         elif selected_model == 'cnnlstm':
+#             model = cnnlstm
+#         else:
+#             return 'Invalid model selection'
+        
+#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
+        
+#         # Return the predictions, metrics, and confusion matrix as a response
+#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
+
+#     return render_template('upload.html')
+
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']
+        
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path, 'static', filename)
+        
+#         file.save(file_path)
+        
+#         # Determine the selected model
+#         selected_model = request.form.get('selected_model')
+
+#         # Perform predictions and calculate metrics using the selected model
+#         if selected_model == 'modelnew':
+#             model = modelnew
+#         elif selected_model == 'cnnlstm':
+#             model = cnnlstm
+#         else:
+#             return 'Invalid model selection'
+        
+#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
+        
+#         # Return the predictions, metrics, and confusion matrix as a response
+#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
+
+#     return render_template('upload.html')
+
 # Good: fraud_data and predictions >= 0.5
 
-def predict_and_calculate_metrics(file_path):
+def predict_and_calculate_metrics(file_path, model):
     # Read the CSV file
     data = []
     target = []
@@ -566,9 +668,16 @@ def predict_and_calculate_metrics(file_path):
             data.append(row[:-1])  # Exclude the last column (target variable)
             target.append(float(row[-1]))  # Convert target variable to numeric type
 
+  # Prepare the input data for prediction
+    if model == cnnlstm:
+        input_data = np.array(data, dtype=np.float32)
+        input_data = np.reshape(input_data, (input_data.shape[0], 10, 1))  # Reshape the input data for "Model 2" (cnnlstm)
+    else:
+        input_data = np.array(data, dtype=np.float32)
+        input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
     # Prepare the input data for prediction
-    input_data = np.array(data, dtype=np.float32)
-    input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
+    # input_data = np.array(data, dtype=np.float32)
+   
 
     # Make predictions using the model
     predictions = model.predict(input_data)
@@ -592,11 +701,9 @@ def predict_and_calculate_metrics(file_path):
 
     return binary_predictions, target, metrics, confusion
 
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
 
 
 

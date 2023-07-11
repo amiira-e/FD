@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="../static/result.css">
@@ -11,15 +11,16 @@
     <div class="container">
         <br>
       <div class="box">
-        <br>
-        <a href="{{ url_for('monitor') }}" class="task-link">
-          <i class="fas fa-chart-line"></i>
-          Monitor customers' behavior
-        </a>
-        <br><br>
+
         <img src="../static/customer.jpeg" alt="Image">
-        <p class="task-description">This option allows you to monitor customers' behavior.<br> You can gain an initial overview of each customer's past transaction history to obtain <br> insights into the frequency 
-             of both fraudulent and non-fraudulent cases associated with each customer.</p>
+        <p class="task-description">This functionality enables the monitoring of customer behavior <br> by providing an initial overview of each customer's transaction history. 
+          <br>Valuable insights are conseuqnently generated for each customer.</p>
+          <br>
+          <a href="{{ url_for('monitor') }}" class="task-link">
+            <i class="fas fa-chart-line"></i>
+            Monitor customers' behavior
+          </a>
+          <br><br>
       </div>
       <div class="box">
         <a href="{{ url_for('fraud') }}" class="task-link">
@@ -215,3 +216,52 @@
       </div>
     </div>
   </body> -->
+
+  <!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/result.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+    <a href="{{ url_for('home') }}" class="back-button">Back</a>
+    <br><br><br>
+    <div class="container">
+        <div class="box">
+          <img src="../static/customer.jpeg" alt="Image"> <br> <br>
+            <a href="{{ url_for('monitor') }}" class="task-link">
+                <i class="fas fa-chart-line"></i>
+                Monitor customers' behavior
+            </a>
+            <p class="task-description">This functionality enables the monitoring of customer behavior by 
+              providing an initial overview of each customer's transaction history.</p>
+        </div>
+        <div class="box special-box">
+          <img src="../static/f.png" alt="Image"> <br> <br>
+            <a href="{{ url_for('fraud') }}" class="task-link">
+                <i class="fas fa-search"></i>
+                Fraud detection
+            </a>
+            <p class="task-description">This functionality facilitates the identification of fraudulent transactions through the utilization of advanced artificial intelligence models, specifically LSTM (Long Short-Term Memory). 
+              By incorporating the requisite input features, the sophisticated model discern instances of fraud.</p>
+        </div>
+        <div class="box" id="myDiv">
+          <img src="../static/csv.png" alt="Image" width="200" height="20"> <br><br>
+            <a href="{{ url_for('upload') }}" class="task-link">
+                <i class="fas fa-search"></i>
+                Fraud detection using CSV file data
+            </a>
+            <p class="task-description">This option allows you to detect fraud using data from a CSV file. It encompasses the use of poerful algorithms like CHAID decision tree,LSTM and hybrid CNN-LSTM.
+              Upload your data and leverage the powerful fraud detection algorithms to identify potential fraudulent activities within the dataset.</p>
+        </div>
+        <div class="box" id="myDiv">
+          <img src="../static/anomalyimage.jpg" alt="Image" width="200" height="20"> <br><br>
+            <a href="{{ url_for('prediction') }}" class="task-link">
+                <i class="fas fa-exclamation-triangle"></i>
+                Anomaly detection
+            </a>
+            <p class="task-description">This option allows you to detect anomalies in transactions. Using advanced algorithms and statistical techniques, our system identifies patterns and outliers that deviate from expected behavior, enabling you to take timely action against potential fraud or suspicious activities.</p>
+        </div>
+    </div>
+</body>
+</html>
