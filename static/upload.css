@@ -1,7 +1,7 @@
 body {
   background-image: url("../static/a.png");
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: 120%;
   color: aliceblue;
 }
 
@@ -32,7 +32,7 @@ table {
   text-align: center;
   color: #000000;
   font-weight: bolder;
-  font-size: 15px;
+  font-size: 13px;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
 }
@@ -46,13 +46,13 @@ th, td {
 
 th {
   background-color: #000000;
-  color: #ffffff;
-  font-weight: bolder;
+  color: #fffbfb;
+  /* font-weight: bolder; */
   text-align: center;
 }
 
 tr:nth-child(even) {
-  background-color: #8ef9ff;
+  background-color: #f9fff9;
   text-align: center;
 }
 
@@ -70,12 +70,20 @@ p {
   margin: 5px 0;
 }
 
-h2 {
+/* h2 {
   margin-top: 20px;
   padding-top: 20px;
   font-size:18px;
+  color: #7ed781;
   font-family:Arial, Helvetica, sans-serif;
-  font-style: italic;
+} */
+
+h2 {
+  margin-top: 20px;
+  padding-top: 20px;
+  font-size: 18px;
+  color: #7ed781;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Custom styles for the Choose File button */
@@ -105,3 +113,37 @@ input[type="submit"]:focus {
   /* Add any other desired hover/focus styles here */
   outline: none; /* Remove the default focus outline if desired */
 }
+
+.model1 {
+  color: red;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.model2 {
+  color: blue;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.custom-select {
+  /* Add your custom styles here */
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 12px;
+  background-color: #f1f1f1;
+  width: 100px;
+}
+
+.slider-container {
+  margin-top: 20px;
+}
+
+#row-slider {
+  width: 300px;
+}
+
+#row-value {
+  display: inline-block;
+  margin-left: 10px;
+}
+

@@ -78,7 +78,7 @@ def prediction():
         is_fraudulent = any(row[11] == 1 for row in data)
 
         # Perform the prediction and get the prediction probabilities
-        prediction_probabilities = model.predict_proba(input_data)[0]
+        prediction_probabilities = modelnew.predict_proba(input_data)[0]
 
         # Generate the ROC curve image
         roc_curve_image = generate_roc_curve(prediction_probabilities)
@@ -193,7 +193,7 @@ def fraud():
         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
 
         # Make predictions using the model
-        prediction = model.predict(input_data)[0]
+        prediction = modelnew.predict(input_data)[0]
 
         # Connect to the SQLite database
         connection = sqlite3.connect(db_path)
@@ -214,7 +214,7 @@ def fraud():
         # is_fraudulent = any(row[11] == 1 for row in data)
 
         # Perform the prediction and get the prediction probabilities
-        prediction_probabilities = model.predict(input_data)[0]
+        prediction_probabilities = modelnew.predict(input_data)[0]
 
         # Generate the ROC curve image
         roc_curve_image = generate_roc_curve(prediction_probabilities)
@@ -423,7 +423,7 @@ def show_data():
         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
 
         # Make predictions using the model
-        prediction = model.predict(input_data)[0]
+        prediction = modelnew.predict(input_data)[0]
         print(prediction)
 
         # Connect to the SQLite database

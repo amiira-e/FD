@@ -1,80 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Upload File</title>
-    <link rel="stylesheet" type="text/css" href="../static/upload.css">
-</head>
-<body>
-    <a href="{{ url_for('prediction') }}" class="back-button">Back</a> 
-    <h2> Upload your csv </h2>
-    <form method="POST" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
-    </form>
-    
-    {% if results %}
-    <h2>Prediction results</h2>
-    <table>
-        <tr>
-          <th>Prediction</th>
-          <th>True Value</th>
-          <th>Result</th>
-        </tr>
-        {% for result in results[:10] %}
-        <tr>
-          <td>{{ result[0] }}</td>
-          <td>{{ result[1] }}</td>
-          <td>{% if result[0] == result[1] %}<span style="color: green;">&#10004;</span>{% else %}<span style="color: red;">&#10008;</span>{% endif %}</td>
-        </tr>
-        {% endfor %}
-      </table>
-
-      <script>
-        function displayRows() {
-            var numRowsInput = document.getElementById("numRowsInput");
-            var numRows = parseInt(numRowsInput.value, 10);
-            var tableRows = document.getElementById("resultTable").rows;
-    
-            for (var i = 1; i < tableRows.length; i++) {
-                if (i <= numRows) {
-                    tableRows[i].style.display = "";
-                } else {
-                    tableRows[i].style.display = "none";
-                }
-            }
-        }
-    </script>
-      
-    {% endif %}
-    
-    {% if metrics %}
-    <h2>Evaluation Metrics:</h2>
-    <p>Precision: {{ metrics.precision }}</p>
-    <p>Recall: {{ metrics.recall }}</p>
-    <p>F1-Score: {{ metrics.f1_score }}</p>
-    {% endif %}
-
-    {% if confusion %}
-    <h2>Confusion Matrix:</h2>
-    <table>
-        <tr>
-            <th></th>
-            <th>Predicted 0</th>
-            <th>Predicted 1</th>
-        </tr>
-        {% for i, row in enumerate(confusion) %}
-        <tr>
-            <th>Actual {{ i }}</th>
-            {% for value in row %}
-            <td>{{ value }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,23 +6,18 @@
 </head>
 <body>
     <a href="{{ url_for('prediction') }}" class="back-button">Back</a> 
+
     <h2> Upload your csv </h2>
-    <!-- <form method="POST" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="radio" name="selected_model" value="lstm" checked> LSTM
-        <input type="radio" name="selected_model" value="cnnlstm"> CNN-LSTM
-        <input type="submit" value="Upload">
-    </form> -->
 
     <form method="POST" action="/upload" enctype="multipart/form-data">
         <input type="file" name="file">
-        <select name="selected_model">
-            <option value="modelnew">Model 1</option>
-            <option value="cnnlstm">Model 2</option>
+        <select name="selected_model" class="custom-select">
+            <option value="modelnew" class="model1">LSTM</option>
+            <option value="cnnlstm" class="model2">Hybrid CNN-LSTM</option>
         </select>
         <input type="submit" value="Upload">
     </form>
-    
+
     {% if results %}
     <h2>Prediction results</h2>
     <table>
@@ -117,9 +35,9 @@
         {% endfor %}
       </table>
     {% endif %}
-    
+
     {% if metrics %}
-    <h2>Evaluation Metrics:</h2>
+    <h2>Evaluation Metrics</h2>
     <p>Precision: {{ metrics.precision }}</p>
     <p>Recall: {{ metrics.recall }}</p>
     <p>F1-Score: {{ metrics.f1_score }}</p>
