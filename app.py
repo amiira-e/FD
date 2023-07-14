@@ -563,6 +563,7 @@ with open(model_path_new, 'rb') as f:
 with open(model_path, 'rb') as f:
     modelnew = pickle.load(f)
 
+# GOOOODD
 # Define your route for the page containing the prediction results
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -626,17 +627,12 @@ def upload():
 
 #     return render_template('upload.html')
 
+# @app.route('/upload', methods=['GET', 'POST'])
 # def upload():
 #     if request.method == 'POST':
 #         # Get the uploaded file
 #         file = request.files['file']
-        
-#         # Save the file to a secure location
-#         filename = secure_filename(file.filename)
-#         file_path = os.path.join(app.root_path, 'static', filename)
-        
-#         file.save(file_path)
-        
+
 #         # Determine the selected model
 #         selected_model = request.form.get('selected_model')
 
@@ -647,15 +643,22 @@ def upload():
 #             model = cnnlstm
 #         else:
 #             return 'Invalid model selection'
-        
+
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path, 'static', filename)
+#         file.save(file_path)
+
 #         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
-        
+
+#         # Get the value from the slider
+#         row_value = int(request.form.get('row_value'))
+
 #         # Return the predictions, metrics, and confusion matrix as a response
-#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
+#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion, row_value=row_value)
 
 #     return render_template('upload.html')
 
-# Good: fraud_data and predictions >= 0.5
 
 def predict_and_calculate_metrics(file_path, model):
     # Read the CSV file
