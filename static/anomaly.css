@@ -1,7 +1,7 @@
 .back-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #e0e4e8;
+    background-color: #ffffff;
     color: #000000;
     text-decoration: none;
     border-radius: 5px;
@@ -38,11 +38,103 @@ body
   .action-button:active {
     background-color: #3e8e41; /* Change the background color when the button is active/pressed */
   }
-  
   .num-rows-input {
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #e8a2a2;
     border-radius: 4px;
     font-size: 13px;
     width: 80px;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+input[type="number"] {
+  padding: 8px;
+  border: 1px solid #e8a2a2;
+  border-radius: 4px;
+  font-size: 13px;
+  width: 80px;
+  margin-bottom: 8px;
+}
+
+.action-button {
+  padding: 8px 16px;
+  background-color: #48034e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #d58080;
+}
+
+
+table {
+  width: 60%; /* Adjust the width as per your preference */
+  margin: 0 auto; /* Center the table horizontally */
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 13px;
+}
+
+th {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+p {
+  font-size: 16px;
+  color: #ffffff;
+}
+
+h1 {
+  text-align: center;
+}
+
+h1 i {
+  margin-right: 10px;
+}
+
+#anomaly-plot {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Center the table */
+table {
+  margin: 0 auto;
+}
+
+#anomaly-plot-heading {
+  color: #66e0eb;
+}
+
+#highest-outlier-heading {
+  color:  #ffffff;;
+  font-size: 16px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  text-align: center;
 }

@@ -587,57 +587,6 @@ import io
 #     # Render the HTML template for GET requests
 #     return render_template('anomaly.html', show_plot=False)
 
-# @app.route('/anomaly', methods=['GET', 'POST'])
-# def anomaly():
-#     if request.method == 'POST':
-#         # Load your dataset and perform any necessary preprocessing
-#         df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
-
-#         # Load the pre-trained isolation forest model
-#         isolationforest = joblib.load('static/isolationforest.pkl')
-
-#         # Extract the features for anomaly detection (e.g., 'amount' column)
-#         X = df[['amount']]
-
-#         # Predict outliers for the 'amount' variable
-#         outlier_scores = isolationforest.decision_function(X)
-#         outlier_predictions = isolationforest.predict(X)
-
-#         # Create a DataFrame with the original data and outlier scores
-#         df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
-
-#         # Sort the DataFrame by outlier scores in descending order
-#         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
-
-#         # Retrieve the customer(s) with the highest outlier score
-#         num_rows = int(request.form.get('num_rows'))
-#         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
-
-#         # Perform anomaly detection and generate the plot
-#         plt.figure()  # Create a new figure
-#         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
-#         plt.xlabel('Transaction Amount', color='white')
-#         plt.ylabel('Outlier Score', color='white')
-#         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
-#         colorbar = plt.colorbar(orientation='vertical')
-#         colorbar.set_label('Outlier Prediction', color='white')
-#         colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
-#         plt.tick_params(colors='white')
-
-#         # Save the plot to a BytesIO buffer
-#         buffer = io.BytesIO()
-#         plt.savefig(buffer, format='png', transparent=True)
-#         buffer.seek(0)
-
-#         # Convert the buffer to base64 encoded string
-#         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
-#         # Return the HTML template with the classification report and plot data
-#         return render_template('anomaly.html', highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data)
-
-#     # Render the HTML template for GET requests
-#     return render_template('anomaly.html', show_plot=False)
-
 @app.route('/anomaly', methods=['GET', 'POST'])
 def anomaly():
     if request.method == 'POST':
@@ -655,20 +604,14 @@ def anomaly():
         outlier_predictions = isolationforest.predict(X)
 
         # Create a DataFrame with the original data and outlier scores
-        df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores, 'Anomaly Value': outlier_predictions})
+        df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
 
         # Sort the DataFrame by outlier scores in descending order
         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
 
         # Retrieve the customer(s) with the highest outlier score
         num_rows = int(request.form.get('num_rows'))
-        df_highest_outliers = df_outliers_sorted.head(num_rows)
-
-        # Retrieve the customer names, amount, outlier score, and anomaly value
-        highest_outlier_customers = df_highest_outliers['nameOrig'].tolist()
-        amounts = df_highest_outliers['amount'].tolist()
-        outlier_scores = df_highest_outliers['Outlier Score'].tolist()
-        anomaly_values = df_highest_outliers['Anomaly Value'].tolist()
+        highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
 
         # Perform anomaly detection and generate the plot
         plt.figure()  # Create a new figure
@@ -689,12 +632,16 @@ def anomaly():
         # Convert the buffer to base64 encoded string
         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-        # Return the HTML template with the classification report, plot data, and table data
-        return render_template('anomaly.html', highest_outlier_customers=highest_outlier_customers, amounts=amounts,
-                               outlier_scores=outlier_scores, anomaly_values=anomaly_values, show_plot=True, plot_data=plot_data)
+        amounts = df_outliers['amount'].tolist()
+        # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
+        anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
+
+        # Return the HTML template with the classification report and plot data
+        return render_template('anomaly.html', outlier_scores=outlier_scores, highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data, amounts=amounts, anomaly_values=anomaly_values)
 
     # Render the HTML template for GET requests
     return render_template('anomaly.html', show_plot=False)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

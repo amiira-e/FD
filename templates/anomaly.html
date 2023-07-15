@@ -7,38 +7,46 @@
 </head>
 <body>
     <a href="{{ url_for('prediction') }}" class="back-button">Back</a> 
-    <h1>Anomaly Detection</h1>
+    <h1><i class="fas fa-chart-line"></i> Anomaly Detection</h1>
 
-    <!-- <form action="/anomaly" method="POST">
-        <input type="submit" value="Launch the Isolation Forest Algorithm" class="action-button" onclick="showAnomalyPlot()">
-    </form> -->
     <form action="/anomaly" method="POST">
-        <label for="num_rows">Number of Rows to Retrieve:</label>
+        <label for="num_rows">Specify the number of customers with the highest outlier score you wish to investigate.</label>
         <input type="number" id="num_rows" name="num_rows" min="1">
         <input type="submit" value="Launch the Isolation Forest Algorithm" class="action-button" onclick="showAnomalyPlot()">
     </form>
+
+    <p id="loading-text" style="display: none">Customers' outlier score loading.........</p>
     
 
-    <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot:</h2>
+    <br><br>
+
     {% if show_plot %}
-    <img src="{{ url_for('static', filename='anomaly_plot.png') }}" alt="Anomaly Plot" id="anomaly-plot" style="display: none">
-    {% endif %}
-   
-    {% if show_plot %}
-    <img src="data:image/png;base64,{{ plot_data }}" alt="Anomaly Plot">
-    {% endif %}
+    <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot height="200" width="300"</h2>
+    <div style="display: flex; justify-content: center;">
+        <img src="data:image/png;base64,{{ plot_data }}" alt="Anomaly Plot">
+    </div>
 
     <script>
         function showAnomalyPlot() {
             var plotHeading = document.getElementById('anomaly-plot-heading');
             var plotImage = document.getElementById('anomaly-plot');
+            var loadingText = document.getElementById('loading-text');
+    
             plotHeading.style.display = 'block';
             plotImage.style.display = 'block';
+            loadingText.style.display = 'block';
+    
+            setTimeout(function() {
+                loadingText.style.display = 'none';
+            }, 2000); // Adjust the timeout duration as needed
         }
     </script>
 
-<h2>Customers with Highest Outlier Scores:</h2>
+    {% endif %}
+
+<br><br><br>
 {% if highest_outlier_customers %}
+<h3 id="highest-outlier-heading">Customers with Highest Outlier Scores</h3>
 <table>
     <thead>
         <tr>
@@ -60,45 +68,7 @@
     </tbody>
 </table>
 {% else %}
-<p>No customers with outlier scores available.</p>
+<!-- <p>Customers' outlier score loading.........</p> -->
 {% endif %}
-
-
-<!-- <h2>Customers with Highest Outlier Scores:</h2>
-{% if highest_outlier_customers %}
-<table>
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for customer in highest_outlier_customers %}
-        <tr>
-            <td>{{ customer }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>No customers with outlier scores available.</p>
-{% endif %} -->
-    <!-- <h2>Classification Report:</h2>
-    {% if report %}
-    <div id="classification-report">
-        <pre id="report" style="display: none">{{ report | tojson }}</pre>
-        <button onclick="viewClassificationReport()">View Classification Report</button>
-    </div>
-    {% else %}
-    <p>No classification report available.</p>
-    {% endif %}
-
-    <script>
-        function viewClassificationReport() {
-            var reportElement = document.getElementById('report');
-            var classificationReport = JSON.parse(reportElement.textContent);
-            alert(JSON.stringify(classificationReport, null, 4));
-        }
-    </script> -->
 </body>
 </html>
