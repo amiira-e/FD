@@ -9,6 +9,7 @@
 {
   background-image: url("../static/a.png");
   background-size:cover;
+  background-size: 120;
 }
   
   .sidenav .sidenav-title {

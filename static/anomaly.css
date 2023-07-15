@@ -1,0 +1,48 @@
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #e0e4e8;
+    color: #000000;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+body
+{
+  background-image: url("../static/a.png");
+  background-size:120%;
+  color:#e0e4e8;
+
+}
+
+.action-button {
+    background-color: #4CAF50; /* Set the background color */
+    color: rgb(0, 0, 0); /* Set the text color */
+    padding: 10px 20px; /* Adjust the padding to your preference */
+    border: none; /* Remove the border */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  
+  .action-button:hover {
+    background-color: #45a049; /* Change the background color on hover */
+  }
+  
+  .action-button:active {
+    background-color: #3e8e41; /* Change the background color when the button is active/pressed */
+  }
+  
+  .num-rows-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 80px;
+}

@@ -5,11 +5,19 @@ import numpy as np
 import tensorflow as tf
 import os
 from sklearn.metrics import roc_curve, auc
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot
 import io
 import base64
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_curve, precision_recall_curve
+from tabulate import tabulate
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import IsolationForest
+from sklearn.metrics import classification_report
 
 app = Flask(__name__)
 
@@ -115,59 +123,6 @@ def generate_roc_curve(prediction_probabilities):
     plt.close()
 
     return encoded_image
-
-# @app.route('/fraud', methods=['GET', 'POST'])
-# def fraud():
-#     if request.method == 'POST':
-#         # Handle the form submission
-#         step = int(request.form['step'])
-#         type = request.form['type']
-#         amount = float(request.form['amount'])
-#         nameOrig = request.form['nameOrig']
-#         oldbalanceOrg = float(request.form['oldbalanceOrg'])
-#         newbalanceOrig = float(request.form['newbalanceOrig'])
-#         newDest = request.form['newDest']
-#         oldbalanceDest = float(request.form['oldbalanceDest'])
-#         newbalanceDest = float(request.form['newbalanceDest'])
-#         isFlaggedFraud = int(request.form['isFlaggedFraud'])
-
-#         # Prepare the input data for prediction
-#         input_data = np.array([[step, type, amount, nameOrig, oldbalanceOrg, newbalanceOrig, newDest,
-#                                 oldbalanceDest, newbalanceDest, isFlaggedFraud]])
-#         input_data = input_data.astype(np.float32)
-#         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
-
-#         # Make predictions using the model
-#         prediction = model.predict(input_data)[0]
-
-#         # Connect to the SQLite database
-#         connection = sqlite3.connect(db_path)
-#         cursor = connection.cursor()
-
-#         # Execute a query to retrieve data for the given customer name
-#         query = "SELECT * FROM train_data WHERE nameOrig = ?"
-#         cursor.execute(query, (nameOrig,))
-
-#         # Fetch the data from the query result
-#         data = cursor.fetchall()
-
-#         # Close the database connection
-#         cursor.close()
-#         connection.close()
-
-#         # Check if any row has isFraud = 1
-#         is_fraudulent = any(row[11] == 1 for row in data)
-
-#         # Perform the prediction and get the prediction probabilities
-#         prediction_probabilities = model.predict(input_data)[0]
-
-#         # Generate the ROC curve image
-#         roc_curve_image = generate_roc_curve(prediction_probabilities)
-
-#         # Pass the data, prediction, is_fraudulent flag, and ROC curve image to the template
-#         return render_template('fraud.html', data=data, prediction=prediction, is_fraudulent=is_fraudulent, roc_curve_image=roc_curve_image)
-
-#     return render_template('fraud.html')
 
 from sklearn import metrics
 
@@ -490,67 +445,6 @@ model_path_new = os.path.join(os.path.dirname(__file__), 'static', 'cnnlstm.pkl'
 with open(model_path_new, 'rb') as f:
     cnnlstm = pickle.load(f)
 
-# @app.route('/upload', methods=['GET', 'POST'])
-# def upload():
-#     if request.method == 'POST':
-#         # Get the uploaded file
-#         file = request.files['file']
-        
-#         # Save the file to a secure location
-#         filename = secure_filename(file.filename)
-#         file_path = os.path.join(app.root_path, filename)
-#         file.save(file_path)
-        
-#         # Perform predictions and calculate metrics using the model
-#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path)
-        
-#         # Return the predictions, metrics, and confusion matrix as a response
-#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
-
-#     return render_template('upload.html')
-
-# # Good: fraud_data and predictions >= 0.5
-
-# def predict_and_calculate_metrics(file_path):
-#     # Read the CSV file
-#     data = []
-#     target = []
-#     with open(file_path, 'r') as csvfile:
-#         reader = csv.reader(csvfile)
-#         next(reader)  # Skip the header row
-#         for row in reader:
-#             data.append(row[:-1])  # Exclude the last column (target variable)
-#             target.append(float(row[-1]))  # Convert target variable to numeric type
-
-#     # Prepare the input data for prediction
-#     input_data = np.array(data, dtype=np.float32)
-#     input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
-
-#     # Make predictions using the model
-#     predictions = model.predict(input_data)
-
-#     # Apply threshold and convert predictions to binary values
-#     binary_predictions = (predictions >= 0.4).astype(int) #0.0000082354  #predictions >= 0.5 predictions >= 0.6
-
-#     # Calculate evaluation metrics
-#     precision = precision_score(target, binary_predictions)
-#     recall = recall_score(target, binary_predictions)
-#     f1 = f1_score(target, binary_predictions)
-
-#     # Calculate confusion matrix
-#     confusion = confusion_matrix(target, binary_predictions).tolist()
-
-#     metrics = {
-#         'precision': precision,
-#         'recall': recall,
-#         'f1_score': f1
-#     }
-
-#     return binary_predictions, target, metrics, confusion
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
 # Specify the paths to the model files
 model_path_new = os.path.join(os.getcwd(), 'static', 'cnnlstm.pkl')
 model_path = os.path.join(os.getcwd(), 'static', 'modelnew.pkl')
@@ -593,72 +487,6 @@ def upload():
         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
 
     return render_template('upload.html')
-
-
-# def upload():
-#     if request.method == 'POST':
-#         # Get the uploaded file
-#         file = request.files['file']
-        
-#         # Save the file to a secure location
-#         filename = secure_filename(file.filename)
-#         file_path = os.path.join(app.root_path, 'static', filename)
-        
-#         file.save(file_path)
-        
-#         # Print the file path to check if it's correct
-#         print("File saved at:", file_path)
-        
-#         # Determine the selected model
-#         selected_model = request.form.get('selected_model')
-
-#         # Perform predictions and calculate metrics using the selected model
-#         if selected_model == 'modelnew':
-#             model = modelnew
-#         elif selected_model == 'cnnlstm':
-#             model = cnnlstm
-#         else:
-#             return 'Invalid model selection'
-        
-#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
-        
-#         # Return the predictions, metrics, and confusion matrix as a response
-#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
-
-#     return render_template('upload.html')
-
-# @app.route('/upload', methods=['GET', 'POST'])
-# def upload():
-#     if request.method == 'POST':
-#         # Get the uploaded file
-#         file = request.files['file']
-
-#         # Determine the selected model
-#         selected_model = request.form.get('selected_model')
-
-#         # Perform predictions and calculate metrics using the selected model
-#         if selected_model == 'modelnew':
-#             model = modelnew
-#         elif selected_model == 'cnnlstm':
-#             model = cnnlstm
-#         else:
-#             return 'Invalid model selection'
-
-#         # Save the file to a secure location
-#         filename = secure_filename(file.filename)
-#         file_path = os.path.join(app.root_path, 'static', filename)
-#         file.save(file_path)
-
-#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
-
-#         # Get the value from the slider
-#         row_value = int(request.form.get('row_value'))
-
-#         # Return the predictions, metrics, and confusion matrix as a response
-#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion, row_value=row_value)
-
-#     return render_template('upload.html')
-
 
 def predict_and_calculate_metrics(file_path, model):
     # Read the CSV file
@@ -704,6 +532,169 @@ def predict_and_calculate_metrics(file_path, model):
 
     return binary_predictions, target, metrics, confusion
 
+from flask import jsonify, render_template
+import pandas as pd
+import joblib
+import io
+
+# @app.route('/anomaly', methods=['GET', 'POST'])
+# def anomaly():
+#     if request.method == 'POST':
+#         # Load your dataset and perform any necessary preprocessing
+#         df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
+
+#         # Load the pre-trained isolation forest model
+#         isolationforest = joblib.load('static/isolationforest.pkl')
+
+#         # Extract the features for anomaly detection (e.g., 'amount' column)
+#         X = df[['amount']]
+
+#         # Predict outliers for the 'amount' variable
+#         outlier_scores = isolationforest.decision_function(X)
+#         outlier_predictions = isolationforest.predict(X)
+
+#         # Create a DataFrame with the original data and outlier scores
+#         df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
+
+#         # Sort the DataFrame by outlier scores in descending order
+#         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
+
+#         # Retrieve the customer(s) with the highest outlier score
+#         highest_outlier_customers = df_outliers_sorted.head(10)['nameOrig'].tolist()
+
+#         # Perform anomaly detection and generate the plot
+#         plt.figure()  # Create a new figure
+#         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
+#         plt.xlabel('Transaction Amount', color='white')
+#         plt.ylabel('Outlier Score', color='white')
+#         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
+#         colorbar = plt.colorbar(orientation='vertical')
+#         colorbar.set_label('Outlier Prediction', color='white')
+#         colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
+#         plt.tick_params(colors='white')
+
+#         # Save the plot to a BytesIO buffer
+#         buffer = io.BytesIO()
+#         plt.savefig(buffer, format='png', transparent=True)
+#         buffer.seek(0)
+
+#         # Convert the buffer to base64 encoded string
+#         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+#         # Return the HTML template with the classification report and plot data
+#         return render_template('anomaly.html', highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data)
+
+#     # Render the HTML template for GET requests
+#     return render_template('anomaly.html', show_plot=False)
+
+# @app.route('/anomaly', methods=['GET', 'POST'])
+# def anomaly():
+#     if request.method == 'POST':
+#         # Load your dataset and perform any necessary preprocessing
+#         df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
+
+#         # Load the pre-trained isolation forest model
+#         isolationforest = joblib.load('static/isolationforest.pkl')
+
+#         # Extract the features for anomaly detection (e.g., 'amount' column)
+#         X = df[['amount']]
+
+#         # Predict outliers for the 'amount' variable
+#         outlier_scores = isolationforest.decision_function(X)
+#         outlier_predictions = isolationforest.predict(X)
+
+#         # Create a DataFrame with the original data and outlier scores
+#         df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
+
+#         # Sort the DataFrame by outlier scores in descending order
+#         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
+
+#         # Retrieve the customer(s) with the highest outlier score
+#         num_rows = int(request.form.get('num_rows'))
+#         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
+
+#         # Perform anomaly detection and generate the plot
+#         plt.figure()  # Create a new figure
+#         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
+#         plt.xlabel('Transaction Amount', color='white')
+#         plt.ylabel('Outlier Score', color='white')
+#         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
+#         colorbar = plt.colorbar(orientation='vertical')
+#         colorbar.set_label('Outlier Prediction', color='white')
+#         colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
+#         plt.tick_params(colors='white')
+
+#         # Save the plot to a BytesIO buffer
+#         buffer = io.BytesIO()
+#         plt.savefig(buffer, format='png', transparent=True)
+#         buffer.seek(0)
+
+#         # Convert the buffer to base64 encoded string
+#         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+#         # Return the HTML template with the classification report and plot data
+#         return render_template('anomaly.html', highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data)
+
+#     # Render the HTML template for GET requests
+#     return render_template('anomaly.html', show_plot=False)
+
+@app.route('/anomaly', methods=['GET', 'POST'])
+def anomaly():
+    if request.method == 'POST':
+        # Load your dataset and perform any necessary preprocessing
+        df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
+
+        # Load the pre-trained isolation forest model
+        isolationforest = joblib.load('static/isolationforest.pkl')
+
+        # Extract the features for anomaly detection (e.g., 'amount' column)
+        X = df[['amount']]
+
+        # Predict outliers for the 'amount' variable
+        outlier_scores = isolationforest.decision_function(X)
+        outlier_predictions = isolationforest.predict(X)
+
+        # Create a DataFrame with the original data and outlier scores
+        df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores, 'Anomaly Value': outlier_predictions})
+
+        # Sort the DataFrame by outlier scores in descending order
+        df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
+
+        # Retrieve the customer(s) with the highest outlier score
+        num_rows = int(request.form.get('num_rows'))
+        df_highest_outliers = df_outliers_sorted.head(num_rows)
+
+        # Retrieve the customer names, amount, outlier score, and anomaly value
+        highest_outlier_customers = df_highest_outliers['nameOrig'].tolist()
+        amounts = df_highest_outliers['amount'].tolist()
+        outlier_scores = df_highest_outliers['Outlier Score'].tolist()
+        anomaly_values = df_highest_outliers['Anomaly Value'].tolist()
+
+        # Perform anomaly detection and generate the plot
+        plt.figure()  # Create a new figure
+        plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
+        plt.xlabel('Transaction Amount', color='white')
+        plt.ylabel('Outlier Score', color='white')
+        plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
+        colorbar = plt.colorbar(orientation='vertical')
+        colorbar.set_label('Outlier Prediction', color='white')
+        colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
+        plt.tick_params(colors='white')
+
+        # Save the plot to a BytesIO buffer
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', transparent=True)
+        buffer.seek(0)
+
+        # Convert the buffer to base64 encoded string
+        plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+        # Return the HTML template with the classification report, plot data, and table data
+        return render_template('anomaly.html', highest_outlier_customers=highest_outlier_customers, amounts=amounts,
+                               outlier_scores=outlier_scores, anomaly_values=anomaly_values, show_plot=True, plot_data=plot_data)
+
+    # Render the HTML template for GET requests
+    return render_template('anomaly.html', show_plot=False)
 
 if __name__ == '__main__':
     app.run(debug=True)

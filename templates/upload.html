@@ -3,15 +3,17 @@
 <head>
     <title>Upload File</title>
     <link rel="stylesheet" type="text/css" href="../static/upload.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body>
     <a href="{{ url_for('prediction') }}" class="back-button">Back</a> 
 
-    <h2> Upload your csv </h2>
+    <h2><i class="fas fa-upload logo"></i>     Upload your CSV</h2>
+
 
     <form method="POST" action="/upload" enctype="multipart/form-data">
         <input type="file" name="file">
-        <select name="selected_model" class="custom-select">
+        <select name="selected_model" class="custom-select" style="width: 200px;">
             <option value="modelnew" class="model1">LSTM</option>
             <option value="cnnlstm" class="model2">Hybrid CNN-LSTM</option>
         </select>
@@ -19,7 +21,7 @@
     </form>
 
     {% if results %}
-    <h2>Prediction results</h2>
+    <h2><i class="fas fa-search logo"></i>     Prediction results </h2>
     <table>
         <tr>
           <th>Prediction</th>
@@ -37,14 +39,19 @@
     {% endif %}
 
     {% if metrics %}
-    <h2>Evaluation Metrics</h2>
+    <!-- <h2>Evaluation Metrics</h2> -->
+    <h2 id="metrics-title"><i class="fas fa-chart-line logo"></i>    Evaluation Metrics</h2>
+
+    <div id="metrics-container">
     <p>Precision: {{ metrics.precision }}</p>
     <p>Recall: {{ metrics.recall }}</p>
     <p>F1-Score: {{ metrics.f1_score }}</p>
     {% endif %}
+    </div>
 
     {% if confusion %}
-    <h2>Confusion Matrix:</h2>
+    <h2><i class="fas fa-th-large logo"></i>     Confusion Matrix </h2>
+
     <table>
         <tr>
             <th></th>
@@ -63,8 +70,6 @@
     {% endif %}
 </body>
 </html>
-
-
 
  
 
