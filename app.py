@@ -221,6 +221,119 @@ def generate_bar_chart(labels, values):
 
     return encoded_image
 
+# @app.route('/monitor', methods=['GET', 'POST'])
+# def monitor():
+#     if request.method == 'POST':
+#         # Handle the form submission
+#         nameOrig = request.form['nameOrig']
+
+#         # Connect to the SQLite database
+#         connection = sqlite3.connect(db_path)
+#         cursor = connection.cursor()
+
+#         # Execute a query to retrieve data for the given customer name
+#         query = "SELECT * FROM train_data WHERE nameOrig = ?"
+#         cursor.execute(query, (nameOrig,))
+
+#         # Fetch the data from the query result
+#         data = cursor.fetchall()
+
+#         # Close the database connection
+#         cursor.close()
+#         connection.close()
+
+#         # Check if any row has isFraud = 1
+#         is_fraudulent = any(row[11] == 1 for row in data)
+
+#         # Generate the bar chart
+#         labels = ['Fraudulent', 'Non-Fraudulent']
+#         values = [0, 0]  # Initialize with 0 occurrences
+#         for row in data:
+#             if row[11] == 1:
+#                 values[0] += 1
+#             elif row[11] == 0:
+#                 values[1] += 1
+
+#         bar_chart = generate_bar_chart(labels, values)
+
+#         # Generate the pie chart
+#         transaction_types = [row[8] for row in data]
+#         type_counts = {}
+#         for transaction_type in transaction_types:
+#             if transaction_type in type_counts:
+#                 type_counts[transaction_type] += 1
+#             else:
+#                 type_counts[transaction_type] = 1
+
+#         pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
+
+#         # Pass the data, is_fraudulent flag, bar chart, and pie chart to the template
+#         return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
+#                                bar_chart=bar_chart, pie_chart=pie_chart)
+    
+#     else:
+#         # Handle the GET request (initial page load and customer search)
+#         search_type = request.args.get('searchType')
+#         search_value = request.args.get('searchValue')
+
+#         if search_type and search_value:
+#             # Connect to the SQLite database
+#             connection = sqlite3.connect(db_path)
+#             cursor = connection.cursor()
+
+#             # Execute a query to retrieve data based on the search type and value
+#             if search_type == 'nameOrig':
+#                 query = "SELECT * FROM train_data WHERE nameOrig = ?"
+#             elif search_type == 'nameDest':
+#                 query = "SELECT * FROM train_data WHERE nameDest = ?"
+
+#             cursor.execute(query, (search_value,))
+
+#             # Fetch the data from the query result
+#             data = cursor.fetchall()
+
+#             # Close the database connection
+#             cursor.close()
+#             connection.close()
+
+#             # Check if any row has isFraud = 1
+#             is_fraudulent = any(row[11] == 1 for row in data)
+
+#             # Generate the bar chart
+#             labels = ['Fraudulent', 'Non-Fraudulent']
+#             values = [0, 0]  # Initialize with 0 occurrences
+#             for row in data:
+#                 if row[11] == 1:
+#                     values[0] += 1
+#                 elif row[11] == 0:
+#                     values[1] += 1
+
+#             bar_chart = generate_bar_chart(labels, values)
+
+#             # Generate the pie chart
+#             transaction_types = [row[8] for row in data]
+#             type_counts = {}
+#             for transaction_type in transaction_types:
+#                 if transaction_type in type_counts:
+#                     type_counts[transaction_type] += 1
+#                 else:
+#                     type_counts[transaction_type] = 1
+
+#             pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
+
+#             # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
+#             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
+#                                    searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
+
+#         # Render the empty form when it's a GET request without searchType and searchValue
+#         return render_template('monitor.html')
+
+import itertools
+# Custom filter to enable zip_longest in Jinja2 templates
+@app.template_filter('zip_longest')
+def zip_longest_filter(*args, fillvalue=None):
+    return itertools.zip_longest(*args, fillvalue=fillvalue)
+
 @app.route('/monitor', methods=['GET', 'POST'])
 def monitor():
     if request.method == 'POST':
@@ -267,9 +380,10 @@ def monitor():
 
         pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
 
-        # Pass the data, is_fraudulent flag, bar chart, and pie chart to the template
+
+        # Pass the data, is_fraudulent flag, bar chart, pie chart, recipients, and counts to the template
         return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-                               bar_chart=bar_chart, pie_chart=pie_chart)
+                               bar_chart=bar_chart, pie_chart=pie_chart,)
     
     else:
         # Handle the GET request (initial page load and customer search)
@@ -321,12 +435,37 @@ def monitor():
 
             pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
 
+
             # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
                                    searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
 
         # Render the empty form when it's a GET request without searchType and searchValue
         return render_template('monitor.html')
+
+import matplotlib.pyplot as plt
+import io
+import base64
+
+# def generate_recipient_chart_image(recipients_counts):
+#     recipients = [entry[0] for entry in recipients_counts]  # Access recipient information from the tuple
+#     counts = [entry[1] for entry in recipients_counts]  # Access count information from the tuple
+
+#     # Generate the bar chart
+#     plt.figure(figsize=(8, 6))
+#     plt.bar(recipients, counts)
+#     plt.xlabel('Recipient')
+#     plt.ylabel('Count')
+#     plt.title('Recipient Transaction Counts')
+
+#     # Convert the chart to a base64 encoded string
+#     buffer = io.BytesIO()
+#     plt.savefig(buffer, format='png')
+#     buffer.seek(0)
+#     chart_image = base64.b64encode(buffer.read()).decode()
+#     plt.close()
+
+#     return chart_image
 
 import matplotlib.pyplot as plt
 
@@ -560,7 +699,8 @@ import io
 #         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
 
 #         # Retrieve the customer(s) with the highest outlier score
-#         highest_outlier_customers = df_outliers_sorted.head(10)['nameOrig'].tolist()
+#         num_rows = int(request.form.get('num_rows'))
+#         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
 
 #         # Perform anomaly detection and generate the plot
 #         plt.figure()  # Create a new figure
@@ -581,8 +721,13 @@ import io
 #         # Convert the buffer to base64 encoded string
 #         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-#         # Return the HTML template with the classification report and plot data
-#         return render_template('anomaly.html', highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data)
+#         amounts = df_outliers['amount'].tolist()
+#         # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
+#         anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
+
+#         # # Return the HTML template with the classification report and plot data
+#         # return render_template('anomaly.html', outlier_scores=outlier_scores, highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data, amounts=amounts, anomaly_values=anomaly_values)
+
 
 #     # Render the HTML template for GET requests
 #     return render_template('anomaly.html', show_plot=False)
@@ -610,8 +755,21 @@ def anomaly():
         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
 
         # Retrieve the customer(s) with the highest outlier score
-        num_rows = int(request.form.get('num_rows'))
+        num_rows = request.form.get('num_rows')
+        if num_rows:
+            num_rows = int(num_rows)
+        else:
+            num_rows = 0
         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
+
+        # Get the customer name from the form input
+        customer_name = request.form.get('customer_name')
+
+        amounts = df_outliers['amount'].tolist()
+
+        # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
+        anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
+
 
         # Perform anomaly detection and generate the plot
         plt.figure()  # Create a new figure
@@ -631,16 +789,107 @@ def anomaly():
 
         # Convert the buffer to base64 encoded string
         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
-        amounts = df_outliers['amount'].tolist()
-        # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
-        anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
-
-        # Return the HTML template with the classification report and plot data
-        return render_template('anomaly.html', outlier_scores=outlier_scores, highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data, amounts=amounts, anomaly_values=anomaly_values)
+        # Return the HTML template with the specific customer's information
+        return render_template('anomaly.html', outlier_scores=outlier_scores,
+                               highest_outlier_customers=highest_outlier_customers,
+                               show_plot=True, plot_data=plot_data, amounts=amounts,
+                               anomaly_values=anomaly_values)
 
     # Render the HTML template for GET requests
     return render_template('anomaly.html', show_plot=False)
+
+# @app.route('/anomaly', methods=['GET', 'POST'])
+# def anomaly():
+#     if request.method == 'POST':
+#         # Load your dataset and perform any necessary preprocessing
+#         df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
+
+#         # Load the pre-trained isolation forest model
+#         isolationforest = joblib.load('static/isolationforest.pkl')
+
+#         # Extract the features for anomaly detection (e.g., 'amount' column)
+#         X = df[['amount']]
+
+#         # Predict outliers for the 'amount' variable
+#         outlier_scores = isolationforest.decision_function(X)
+#         outlier_predictions = isolationforest.predict(X)
+
+#         # Create a DataFrame with the original data and outlier scores
+#         df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
+
+#         # Sort the DataFrame by outlier scores in descending order
+#         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
+
+#         # Retrieve the customer(s) with the highest outlier score
+#         num_rows = request.form.get('num_rows')
+#         if num_rows:
+#             num_rows = int(num_rows)
+#         else:
+#             num_rows = 0
+
+#         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
+
+#         # Get the customer name from the form input
+#         customer_name = request.form.get('customer_name')
+
+#         # Filter the data for the specified customer name
+#         customer_data = df_outliers[df_outliers['nameOrig'] == customer_name]
+
+#         amounts = df_outliers['amount'].tolist()
+
+#         # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
+#         anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
+
+#         if num_rows == 0 and customer_name:
+#             # Filter the data for the specified customer name
+#             customer_data = df_outliers[df_outliers['nameOrig'] == customer_name]
+
+#             if not customer_data.empty:
+#                 # Retrieve the specific customer's information
+#                 customer_outlier_score = customer_data['Outlier Score'].values[0]
+#                 customer_amount = customer_data['amount'].values[0]
+#                 customer_anomaly_value = -1 if outlier_predictions[customer_data.index[0]] == -1 else 1
+
+#         if not customer_data.empty:
+#             # Retrieve the specific customer's information
+#             customer_outlier_score = customer_data['Outlier Score'].values[0]
+#             customer_amount = customer_data['amount'].values[0]
+#             customer_anomaly_value = -1 if outlier_predictions[customer_data.index[0]] == -1 else 1
+#         else:
+#             # Set default values if the customer data is not found
+#             customer_outlier_score = 0
+#             customer_amount = 0
+#             customer_anomaly_value = 0
+
+#         # Perform anomaly detection and generate the plot
+#         plt.figure()  # Create a new figure
+#         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
+#         plt.xlabel('Transaction Amount', color='white')
+#         plt.ylabel('Outlier Score', color='white')
+#         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
+#         colorbar = plt.colorbar(orientation='vertical')
+#         colorbar.set_label('Outlier Prediction', color='white')
+#         colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
+#         plt.tick_params(colors='white')
+
+#         # Save the plot to a BytesIO buffer
+#         buffer = io.BytesIO()
+#         plt.savefig(buffer, format='png', transparent=True)
+#         buffer.seek(0)
+
+#         # Convert the buffer to base64 encoded string
+#         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+#         # Return the HTML template with the specific customer's information
+#         return render_template('anomaly.html', outlier_scores=outlier_scores,
+#                                highest_outlier_customers=highest_outlier_customers,
+#                                show_plot=True, plot_data=plot_data, amounts=amounts,
+#                                anomaly_values=anomaly_values, customer_name=customer_name,
+#                                customer_outlier_score=customer_outlier_score,
+#                                customer_amount=customer_amount, customer_anomaly_value=customer_anomaly_value)
+
+#     # Render the HTML template for GET requests
+#     return render_template('anomaly.html', show_plot=False)
 
 
 if __name__ == '__main__':

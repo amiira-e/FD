@@ -10,7 +10,7 @@
     <h1><i class="fas fa-chart-line"></i> Anomaly Detection</h1>
 
     <form action="/anomaly" method="POST">
-        <label for="num_rows">Specify the number of customers with the highest outlier score you wish to investigate.</label>
+        <label for="num_rows">Specify the number of customers to be investigated</label>
         <input type="number" id="num_rows" name="num_rows" min="1">
         <input type="submit" value="Launch the Isolation Forest Algorithm" class="action-button" onclick="showAnomalyPlot()">
     </form>
@@ -21,7 +21,7 @@
     <br><br>
 
     {% if show_plot %}
-    <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot height="200" width="300"</h2>
+    <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot</h2>
     <div style="display: flex; justify-content: center;">
         <img src="data:image/png;base64,{{ plot_data }}" alt="Anomaly Plot">
     </div>
@@ -46,7 +46,7 @@
 
 <br><br><br>
 {% if highest_outlier_customers %}
-<h3 id="highest-outlier-heading">Customers with Highest Outlier Scores</h3>
+<h3 id="highest-outlier-heading"> Outlier Scores</h3>
 <table>
     <thead>
         <tr>
@@ -68,7 +68,38 @@
     </tbody>
 </table>
 {% else %}
-<!-- <p>Customers' outlier score loading.........</p> -->
+
 {% endif %}
+
+<!-- <form action="/anomaly" method="POST">
+    <label for="customer_name">Enter the Customer Name:</label>
+    <input type="text" id="customer_name" name="customer_name">
+    <br>
+    <input type="submit" value="Launch the Isolation Forest Algorithm" class="action-button" onclick="showAnomalyPlot()">
+</form>
+
+
+{% if customer_name %}
+<h3>Customer Information</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Customer Name</th>
+            <th>Amount</th>
+            <th>Outlier Score</th>
+            <th>Anomaly Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ customer_name }}</td>
+            <td>{{ customer_amount }}</td>
+            <td>{{ customer_outlier_score }}</td>
+            <td>{{ customer_anomaly_value }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endif %} -->
+
 </body>
 </html>
