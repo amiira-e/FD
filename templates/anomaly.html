@@ -17,9 +17,8 @@
 
     <p id="loading-text" style="display: none">Customers' outlier score loading.........</p>
     
-
     <br><br>
-
+    
     {% if show_plot %}
     <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot</h2>
     <div style="display: flex; justify-content: center;">
@@ -44,62 +43,64 @@
 
     {% endif %}
 
-<br><br><br>
-{% if highest_outlier_customers %}
-<h3 id="highest-outlier-heading"> Outlier Scores</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Amount</th>
-            <th>Outlier Score</th>
-            <th>Anomaly Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for i in range(highest_outlier_customers|length) %}
-        <tr>
-            <td>{{ highest_outlier_customers[i] }}</td>
-            <td>{{ amounts[i] }}</td>
-            <td>{{ outlier_scores[i] }}</td>
-            <td>{{ anomaly_values[i] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
+    <br><br><br>
 
-{% endif %}
+    {% if highest_outlier_customers %}
+    <h3 id="highest-outlier-heading">Outlier Scores</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Amount</th>
+                <th>Outlier Score</th>
+                <th>Anomaly Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(highest_outlier_customers|length) %}
+            <tr>
+                <td>{{ highest_outlier_customers[i] }}</td>
+                <td>{{ amounts[i] }}</td>
+                <td>{{ outlier_scores[i] }}</td>
+                <td>{{ anomaly_values[i] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<!-- <form action="/anomaly" method="POST">
-    <label for="customer_name">Enter the Customer Name:</label>
-    <input type="text" id="customer_name" name="customer_name">
-    <br>
-    <input type="submit" value="Launch the Isolation Forest Algorithm" class="action-button" onclick="showAnomalyPlot()">
-</form>
+    <br><br>
+    <!-- <h3>Customer Details</h3> -->
+    <!-- <form action="/customer_details" method="POST">
+        <label for="customer_name">Enter Customer Name:</label>
+        <input type="text" id="customer_name" name="customer_name">
+        <input type="submit" value="Get Details" class="action-button">
+    </form>
 
+    <br><br>
 
-{% if customer_name %}
-<h3>Customer Information</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Customer Name</th>
-            <th>Amount</th>
-            <th>Outlier Score</th>
-            <th>Anomaly Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ customer_name }}</td>
-            <td>{{ customer_amount }}</td>
-            <td>{{ customer_outlier_score }}</td>
-            <td>{{ customer_anomaly_value }}</td>
-        </tr>
-    </tbody>
-</table>
-{% endif %} -->
+    {% if customer_details %}
+    <h3>Customer Details:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Amount</th>
+                <th>Outlier Score</th>
+                <th>Anomaly Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ customer_details.nameOrig }}</td>
+                <td>{{ customer_details.amount }}</td>
+                <td>{{ customer_details.Outlier_Score }}</td>
+                <td>{{ customer_details.Anomaly_Value }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+    {% else %}
 
+    {% endif %} 
 </body>
 </html>

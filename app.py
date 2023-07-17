@@ -676,62 +676,6 @@ import pandas as pd
 import joblib
 import io
 
-# @app.route('/anomaly', methods=['GET', 'POST'])
-# def anomaly():
-#     if request.method == 'POST':
-#         # Load your dataset and perform any necessary preprocessing
-#         df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
-
-#         # Load the pre-trained isolation forest model
-#         isolationforest = joblib.load('static/isolationforest.pkl')
-
-#         # Extract the features for anomaly detection (e.g., 'amount' column)
-#         X = df[['amount']]
-
-#         # Predict outliers for the 'amount' variable
-#         outlier_scores = isolationforest.decision_function(X)
-#         outlier_predictions = isolationforest.predict(X)
-
-#         # Create a DataFrame with the original data and outlier scores
-#         df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
-
-#         # Sort the DataFrame by outlier scores in descending order
-#         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
-
-#         # Retrieve the customer(s) with the highest outlier score
-#         num_rows = int(request.form.get('num_rows'))
-#         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
-
-#         # Perform anomaly detection and generate the plot
-#         plt.figure()  # Create a new figure
-#         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
-#         plt.xlabel('Transaction Amount', color='white')
-#         plt.ylabel('Outlier Score', color='white')
-#         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
-#         colorbar = plt.colorbar(orientation='vertical')
-#         colorbar.set_label('Outlier Prediction', color='white')
-#         colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
-#         plt.tick_params(colors='white')
-
-#         # Save the plot to a BytesIO buffer
-#         buffer = io.BytesIO()
-#         plt.savefig(buffer, format='png', transparent=True)
-#         buffer.seek(0)
-
-#         # Convert the buffer to base64 encoded string
-#         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
-#         amounts = df_outliers['amount'].tolist()
-#         # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
-#         anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
-
-#         # # Return the HTML template with the classification report and plot data
-#         # return render_template('anomaly.html', outlier_scores=outlier_scores, highest_outlier_customers=highest_outlier_customers, show_plot=True, plot_data=plot_data, amounts=amounts, anomaly_values=anomaly_values)
-
-
-#     # Render the HTML template for GET requests
-#     return render_template('anomaly.html', show_plot=False)
-
 @app.route('/anomaly', methods=['GET', 'POST'])
 def anomaly():
     if request.method == 'POST':
@@ -760,7 +704,7 @@ def anomaly():
             num_rows = int(num_rows)
         else:
             num_rows = 0
-        highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
+        highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].astype(str).tolist()
 
         # Get the customer name from the form input
         customer_name = request.form.get('customer_name')
@@ -770,6 +714,11 @@ def anomaly():
         # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
         anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
 
+        # Store the data in app.config dictionary
+        app.config['highest_outlier_customers'] = highest_outlier_customers
+        app.config['amounts'] = amounts
+        app.config['outlier_scores'] = outlier_scores
+        app.config['anomaly_values'] = anomaly_values
 
         # Perform anomaly detection and generate the plot
         plt.figure()  # Create a new figure
@@ -789,6 +738,7 @@ def anomaly():
 
         # Convert the buffer to base64 encoded string
         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
         # Return the HTML template with the specific customer's information
         return render_template('anomaly.html', outlier_scores=outlier_scores,
                                highest_outlier_customers=highest_outlier_customers,
@@ -798,98 +748,70 @@ def anomaly():
     # Render the HTML template for GET requests
     return render_template('anomaly.html', show_plot=False)
 
-# @app.route('/anomaly', methods=['GET', 'POST'])
-# def anomaly():
-#     if request.method == 'POST':
-#         # Load your dataset and perform any necessary preprocessing
-#         df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
 
-#         # Load the pre-trained isolation forest model
-#         isolationforest = joblib.load('static/isolationforest.pkl')
+# @app.route('/customer_details', methods=['POST'])
+# def customer_details():
+#     customer_name = request.form.get('customer_name')
 
-#         # Extract the features for anomaly detection (e.g., 'amount' column)
-#         X = df[['amount']]
+#     highest_outlier_customers = app.config.get('highest_outlier_customers')
+#     amounts = app.config.get('amounts')
+#     outlier_scores = app.config.get('outlier_scores')
+#     anomaly_values = app.config.get('anomaly_values')
 
-#         # Predict outliers for the 'amount' variable
-#         outlier_scores = isolationforest.decision_function(X)
-#         outlier_predictions = isolationforest.predict(X)
+#     # Convert the customer_name to string for comparison
+#     customer_name = str(customer_name)
 
-#         # Create a DataFrame with the original data and outlier scores
-#         df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
+#     if customer_name in highest_outlier_customers:
+#         customer_index = highest_outlier_customers.index(customer_name)
 
-#         # Sort the DataFrame by outlier scores in descending order
-#         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
+#         # Retrieve the corresponding details from the other lists
+#         customer_details = {
+#             'nameOrig': highest_outlier_customers[customer_index],
+#             'amount': amounts[customer_index],
+#             'Outlier_Score': outlier_scores[customer_index],
+#             'Anomaly_Value': anomaly_values[customer_index]
+#         }
+#     else:
+#         # Customer not found
+#         customer_details = None
 
-#         # Retrieve the customer(s) with the highest outlier score
-#         num_rows = request.form.get('num_rows')
-#         if num_rows:
-#             num_rows = int(num_rows)
-#         else:
-#             num_rows = 0
+#     return render_template('anomaly.html', show_plot=True, highest_outlier_customers=highest_outlier_customers,
+#                            amounts=amounts,
+#                            outlier_scores=outlier_scores, anomaly_values=anomaly_values,
+#                            customer_details=customer_details)
 
-#         highest_outlier_customers = df_outliers_sorted.head(num_rows)['nameOrig'].tolist()
+# import sqlite3
 
-#         # Get the customer name from the form input
-#         customer_name = request.form.get('customer_name')
+# @app.route('/customer_details', methods=['POST'])
+# def customer_details():
+#     customer_name = request.form.get('customer_name')
 
-#         # Filter the data for the specified customer name
-#         customer_data = df_outliers[df_outliers['nameOrig'] == customer_name]
+#     # Connect to the SQLite database
+#     conn = sqlite3.connect('C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\DB_test\\demo.db')
+#     cursor = conn.cursor()
 
-#         amounts = df_outliers['amount'].tolist()
+#     # Query the database to fetch customer details
+#     query = "SELECT nameOrig, amount FROM fraud_data WHERE nameOrig = ?"
+#     cursor.execute(query, (customer_name,))
+#     result = cursor.fetchone()
 
-#         # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
-#         anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
+#     # Close the database connection
+#     cursor.close()
+#     conn.close()
 
-#         if num_rows == 0 and customer_name:
-#             # Filter the data for the specified customer name
-#             customer_data = df_outliers[df_outliers['nameOrig'] == customer_name]
+#     if result:
+#         # Customer details found
+#         customer_details = {
+#             'nameOrig': result[0],
+#             'amount': result[1],
+#             # 'Outlier_Score': result[2],
+#             # 'Anomaly_Value': result[3]
+#         }
+#     else:
+#         # Customer not found
+#         customer_details = None
 
-#             if not customer_data.empty:
-#                 # Retrieve the specific customer's information
-#                 customer_outlier_score = customer_data['Outlier Score'].values[0]
-#                 customer_amount = customer_data['amount'].values[0]
-#                 customer_anomaly_value = -1 if outlier_predictions[customer_data.index[0]] == -1 else 1
-
-#         if not customer_data.empty:
-#             # Retrieve the specific customer's information
-#             customer_outlier_score = customer_data['Outlier Score'].values[0]
-#             customer_amount = customer_data['amount'].values[0]
-#             customer_anomaly_value = -1 if outlier_predictions[customer_data.index[0]] == -1 else 1
-#         else:
-#             # Set default values if the customer data is not found
-#             customer_outlier_score = 0
-#             customer_amount = 0
-#             customer_anomaly_value = 0
-
-#         # Perform anomaly detection and generate the plot
-#         plt.figure()  # Create a new figure
-#         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
-#         plt.xlabel('Transaction Amount', color='white')
-#         plt.ylabel('Outlier Score', color='white')
-#         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
-#         colorbar = plt.colorbar(orientation='vertical')
-#         colorbar.set_label('Outlier Prediction', color='white')
-#         colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
-#         plt.tick_params(colors='white')
-
-#         # Save the plot to a BytesIO buffer
-#         buffer = io.BytesIO()
-#         plt.savefig(buffer, format='png', transparent=True)
-#         buffer.seek(0)
-
-#         # Convert the buffer to base64 encoded string
-#         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-
-#         # Return the HTML template with the specific customer's information
-#         return render_template('anomaly.html', outlier_scores=outlier_scores,
-#                                highest_outlier_customers=highest_outlier_customers,
-#                                show_plot=True, plot_data=plot_data, amounts=amounts,
-#                                anomaly_values=anomaly_values, customer_name=customer_name,
-#                                customer_outlier_score=customer_outlier_score,
-#                                customer_amount=customer_amount, customer_anomaly_value=customer_anomaly_value)
-
-#     # Render the HTML template for GET requests
-#     return render_template('anomaly.html', show_plot=False)
+#     return render_template('anomaly.html', show_plot=True, customer_details=customer_details)
 
 
 if __name__ == '__main__':
