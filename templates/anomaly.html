@@ -45,12 +45,17 @@
 
     <br><br><br>
 
+    <div class="legend-box">
+        <span class="legend-item anomaly-color">Anomalous customer (1)</span>
+        <span class="legend-item non-anomaly-color">Non-anomalous customer (0)</span>
+    </div>
+
     {% if highest_outlier_customers %}
     <h3 id="highest-outlier-heading">Outlier Scores</h3>
     <table>
         <thead>
             <tr>
-                <th>Customer Name</th>
+                <th>Customer ID</th>
                 <th>Amount</th>
                 <th>Outlier Score</th>
                 <th>Anomaly Value</th>
@@ -69,8 +74,8 @@
     </table>
 
     <br><br>
-    <!-- <h3>Customer Details</h3> -->
-    <!-- <form action="/customer_details" method="POST">
+    <!-- <h3>Customer Details</h3> 
+    <form action="/customer_details" method="POST">
         <label for="customer_name">Enter Customer Name:</label>
         <input type="text" id="customer_name" name="customer_name">
         <input type="submit" value="Get Details" class="action-button">
@@ -104,3 +109,79 @@
     {% endif %} 
 </body>
 </html>
+
+<!-- 
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/anomaly.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        /* CSS styles for the legend box */
+        .legend-box {
+            display: inline-block;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .legend-item {
+            margin-right: 10px;
+            color: black;
+        }
+        
+        .anomaly-color {
+            background-color: #c2a7a7;
+        }
+        
+        .non-anomaly-color {
+            background-color: #b8cdb8;
+        }
+    </style>
+    <title>Anomaly Detection</title>
+</head>
+<body>
+    <a href="{{ url_for('prediction') }}" class="back-button">Back</a> 
+    <h1><i class="fas fa-chart-line"></i> Anomaly Detection</h1>
+
+    <form action="/anomaly" method="POST">
+        <label for="num_rows">Specify the number of customers to be investigated</label>
+        <input type="number" id="num_rows" name="num_rows" min="1">
+        <input type="submit" value="Launch the Isolation Forest Algorithm" class="action-button" onclick="showAnomalyPlot()">
+    </form>
+
+    <p id="loading-text" style="display: none">Customers' outlier score loading.........</p>
+    
+    <br><br>
+    
+    {% if show_plot %}
+    <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot</h2>
+    <div style="display: flex; justify-content: center;">
+        <img src="data:image/png;base64,{{ plot_data }}" alt="Anomaly Plot">
+    </div>
+
+    <div class="legend-box">
+        <span class="legend-item anomaly-color">Anomalous customer (1)</span>
+        <span class="legend-item non-anomaly-color">Non-anomalous customer (0)</span>
+    </div>
+    
+    <script>
+        function showAnomalyPlot() {
+            var plotHeading = document.getElementById('anomaly-plot-heading');
+            var plotImage = document.getElementById('anomaly-plot');
+            var loadingText = document.getElementById('loading-text');
+    
+            plotHeading.style.display = 'block';
+            plotImage.style.display = 'block';
+            loadingText.style.display = 'block';
+    
+            setTimeout(function() {
+                loadingText.style.display = 'none';
+            }, 2000); // Adjust the timeout duration as needed
+        }
+    </script>
+
+    {% endif %}
+</body>
+</html> -->
+

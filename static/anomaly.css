@@ -138,3 +138,42 @@ table {
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-align: center;
 }
+span.anomalous-customer {
+  color: red;
+  font-weight: bold;
+}
+
+span.non-anomalous-customer {
+  color: green;
+  font-weight: bold;
+}
+
+ /* CSS styles for the legend box */
+ .legend-box {
+  position: absolute;
+  top: 800px;
+  right: 10px;
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color:#000000;
+}
+
+.legend-item {
+  margin-right: 10px;
+  color:#000000;
+  font-weight: bold;
+}
+
+.anomaly-color {
+  background-color: #e5bebe;
+  color:#000000;
+  font-weight: bold;
+}
+
+.non-anomaly-color {
+  background-color: #c4e7c4;
+  color:#000000;
+  font-weight: bold;
+}

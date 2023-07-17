@@ -598,6 +598,136 @@ with open(model_path, 'rb') as f:
 
 # GOOOODD
 # Define your route for the page containing the prediction results
+# @app.route('/upload', methods=['GET', 'POST'])
+# def upload():
+#     if request.method == 'POST':
+#         # Get the uploaded file
+#         file = request.files['file']
+
+#         # Determine the selected model
+#         selected_model = request.form.get('selected_model')
+
+#         # Perform predictions and calculate metrics using the selected model
+#         if selected_model == 'modelnew':
+#             model = modelnew
+#         elif selected_model == 'cnnlstm':
+#             model = cnnlstm
+#         else:
+#             return 'Invalid model selection'
+
+#         # Save the file to a secure location
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(app.root_path, 'static', filename)
+#         file.save(file_path)
+
+#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
+
+#         # Return the predictions, metrics, and confusion matrix as a response
+#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
+
+#     return render_template('upload.html')
+
+# def predict_and_calculate_metrics(file_path, model):
+#     # Read the CSV file
+#     data = []
+#     target = []
+#     with open(file_path, 'r') as csvfile:
+#         reader = csv.reader(csvfile)
+#         next(reader)  # Skip the header row
+#         for row in reader:
+#             try:
+#                 target.append(float(row[-1]))  # Convert target variable to numeric type
+#             except ValueError:
+#                 print(f"Invalid value: {row[-1]}")
+#                 # Handle the case when the value cannot be converted to float
+#                 # For example, you can skip this row or assign a default/fallback value to target
+
+#             data.append(row[:-1])  # Exclude the last column (target variable)
+#   # Prepare the input data for prediction
+#     if model == cnnlstm:
+#         input_data = np.array(data, dtype=np.float32)
+#         input_data = np.reshape(input_data, (input_data.shape[0], 10, 1))  # Reshape the input data for "Model 2" (cnnlstm)
+#     else:
+#         input_data = np.array(data, dtype=np.float32)
+#         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
+
+# #     # Make predictions using the model
+# #     predictions = model.predict(input_data)
+
+# #     # Apply threshold and convert predictions to binary values
+# #     binary_predictions = (predictions >= 0.4115).astype(int) #0.0000082354  #predictions >= 0.5 predictions >= 0.6
+
+# # #   # Handle length discrepancy between target and binary_predictions
+# # #     if len(target) != len(binary_predictions):
+# # #         min_length = min(len(target), len(binary_predictions))
+# # #         target = target[:min_length]
+# # #         binary_predictions = binary_predictions[:min_length]
+
+# #     # Calculate evaluation metrics
+# #     precision = precision_score(target, binary_predictions)
+# #     recall = recall_score(target, binary_predictions)
+# #     f1 = f1_score(target, binary_predictions)
+
+# #     # Calculate confusion matrix
+# #     confusion = confusion_matrix(target, binary_predictions).tolist()
+
+#     y_pred_prob = model.predict(input_data)
+#     y_pred = (y_pred_prob > 0.5).astype(int)
+#     from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+
+#     # Make predictions on test data
+#     y_pred_prob = model.predict(input_data)
+
+#     # Threshold tuning
+#     thresholds = np.arange(0.1, 1.0, 0.1)
+#     best_f1_score = 0
+#     best_threshold = 0
+
+#     for threshold in thresholds:
+#         y_pred = (y_pred_prob > threshold).astype(int)
+#         f1 = f1_score(target, y_pred)
+
+#         if f1 > best_f1_score:
+#             best_f1_score = f1
+#             best_threshold = threshold
+
+#     # Apply best threshold to obtain final predictions
+#     y_pred = (y_pred_prob > best_threshold).astype(int)
+
+#   # Handle length discrepancy between target and binary_predictions
+#     if len(target) != len(y_pred):
+#         min_length = min(len(target), len(y_pred))
+#         target = target[:min_length]
+#         y_pred = y_pred[:min_length]
+
+#     # Compute evaluation metrics and confusion matrix
+#     precision = precision_score(target, y_pred)
+#     recall = recall_score(target, y_pred)
+#     f1 = f1_score(target, y_pred)
+#     cm = confusion_matrix(target, y_pred)
+
+#     print("Best Threshold:", best_threshold)
+#     print("Precision:", precision)
+#     print("Recall:", recall)
+#     print("F1 Score:", f1)
+#     print("Confusion Matrix:")
+#     print(cm)
+
+#     # Calculate confusion matrix
+#     confusion = confusion_matrix(target, y_pred).tolist()
+
+#     metrics = {
+#         'precision': precision,
+#         'recall': recall,
+#         'f1_score': f1
+#     }
+
+#     return y_pred, target, metrics, confusion
+
+
+####### GOOD 2
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -635,33 +765,83 @@ def predict_and_calculate_metrics(file_path, model):
         reader = csv.reader(csvfile)
         next(reader)  # Skip the header row
         for row in reader:
-            data.append(row[:-1])  # Exclude the last column (target variable)
-            target.append(float(row[-1]))  # Convert target variable to numeric type
+            try:
+                target.append(float(row[-1]))  # Convert target variable to numeric type
+            except ValueError:
+                print(f"Invalid value: {row[-1]}")
+                # Handle the case when the value cannot be converted to float
+                # For example, you can skip this row or assign a default/fallback value to target
 
-  # Prepare the input data for prediction
+            data.append(row[:-1])  # Exclude the last column (target variable)
+  
+    # Prepare the input data for prediction
     if model == cnnlstm:
         input_data = np.array(data, dtype=np.float32)
         input_data = np.reshape(input_data, (input_data.shape[0], 10, 1))  # Reshape the input data for "Model 2" (cnnlstm)
-    else:
+
+        # Make predictions using the model
+        predictions = model.predict(input_data)
+
+        # Apply threshold and convert predictions to binary values
+        binary_predictions = (predictions >= 0.4115).astype(int)  # Adjust the threshold as needed
+
+        # Calculate evaluation metrics
+        precision = precision_score(target, binary_predictions)
+        recall = recall_score(target, binary_predictions)
+        f1 = f1_score(target, binary_predictions)
+
+        # Calculate confusion matrix
+        confusion = confusion_matrix(target, binary_predictions).tolist()
+
+    elif model == modelnew:
         input_data = np.array(data, dtype=np.float32)
         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
-    # Prepare the input data for prediction
-    # input_data = np.array(data, dtype=np.float32)
-   
 
-    # Make predictions using the model
-    predictions = model.predict(input_data)
+        y_pred_prob = model.predict(input_data)
+        y_pred = (y_pred_prob > 0.5).astype(int)
 
-    # Apply threshold and convert predictions to binary values
-    binary_predictions = (predictions >= 0.4).astype(int) #0.0000082354  #predictions >= 0.5 predictions >= 0.6
+        # Make predictions on test data
+        y_pred_prob = model.predict(input_data)
 
-    # Calculate evaluation metrics
-    precision = precision_score(target, binary_predictions)
-    recall = recall_score(target, binary_predictions)
-    f1 = f1_score(target, binary_predictions)
+        # Threshold tuning
+        thresholds = np.arange(0.1, 1.0, 0.1)
+        best_f1_score = 0
+        best_threshold = 0
 
-    # Calculate confusion matrix
-    confusion = confusion_matrix(target, binary_predictions).tolist()
+        for threshold in thresholds:
+            y_pred = (y_pred_prob > threshold).astype(int)
+            f1 = f1_score(target, y_pred)
+
+            if f1 > best_f1_score:
+                best_f1_score = f1
+                best_threshold = threshold
+
+        # Apply best threshold to obtain final predictions
+        y_pred = (y_pred_prob > best_threshold).astype(int)
+
+        # Handle length discrepancy between target and y_pred
+        if len(target) != len(y_pred):
+            min_length = min(len(target), len(y_pred))
+            target = target[:min_length]
+            y_pred = y_pred[:min_length]
+
+        # Compute evaluation metrics and confusion matrix
+        precision = precision_score(target, y_pred)
+        recall = recall_score(target, y_pred)
+        f1 = f1_score(target, y_pred)
+        confusion = confusion_matrix(target, y_pred).tolist()
+
+        print("Best Threshold:", best_threshold)
+        print("Precision:", precision)
+        print("Recall:", recall)
+        print("F1 Score:", f1)
+        print("Confusion Matrix:")
+        print(confusion)
+
+        binary_predictions = y_pred  # Assign the binary predictions
+
+    else:
+        return 'Invalid model'
 
     metrics = {
         'precision': precision,
