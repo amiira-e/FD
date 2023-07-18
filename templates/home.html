@@ -30,7 +30,7 @@
 </body>
 </html> -->
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -45,23 +45,148 @@
 
   <div class="flex-container">
     <div class="flex-item">
-       <!-- <h2>About FRAUDSAFE</h2> -->
+     
       <p>FraudSafe is a cutting-edge AI-powered fraud detection system that leverages advanced technologies to safeguard businesses and individuals against fraudulent activities. 
         <br> <br> With the ever-increasing sophistication of fraudulent practices, FRAUDSAFE recognizes the pressing need for a comprehensive solution that 
         can adapt to evolving threats and protect organizations from financial losses and reputational damage.</p>
-      <!-- <img src="{{ url_for('static', filename='real2.jpg') }}" alt="Image 1">
-      <h2>Real-time Analytics</h2> -->
-      <!-- <p>Detect and prevent fraud with the powerful real-time analytics dashboard. <br> Gain valuable insights into fraudulent patterns and behaviors and take immediate action.</p> -->
+
       <br><br><br>
-      <!-- <a href="{{ url_for('dashboard') }}" class="image-button">Get insights on the current data</a> -->
+      
+      <button onclick="showLoginForm()" class="image-button">Explore the functions of FRAUDSAFE system</button>
+      <div id="loginForm" style="display: none;">
+        <h2>Login</h2>
+        <form action="{{ url_for('home') }}" method="POST">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required>
+          <br><br>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required>
+          <br><br>
+          <input type="submit" value="Login">
+        </form>
+      </div>
     </div>
     <div class="flex-item">
       <img src="{{ url_for('static', filename='ai.jpg') }}" alt="Image 2">
-      <!-- <h2>Advanced Detection</h2>
-      <p>Discover the power of advanced detection with cutting-edge machine learning algorithms.<br> Stay one step ahead of fraudsters as these algorithms proactively identify and prevent fraudulent activities.<br> The intelligent system leverages the latest technology to protect us from deceiful acts. </p> -->
+      <br><br>
+       <a href="{{ url_for('prediction') }}" class="image-button">Continue without login</a> -
+    </div>
+  </div>
+
+  
+    </div>
+   <div class="flex-item">
+      <img src="{{ url_for('static', filename='ai.jpg') }}" alt="Image 2">
+
+      <br><br>
+      <a href="{{ url_for('prediction') }}" class="image-button">Explore the functions of FRAUDSAFE system</a>
+    </div> 
+  </div>
+</body>
+</html>  -->
+
+<!-- GOOD-->
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Flex Container</title>
+  <link rel="stylesheet" type="text/css" href="../static/home.css">
+</head>
+<body>
+  
+  <div class="company-info">
+    <img src="{{ url_for('static', filename='new_logo.png') }}" alt="Company Logo" class="company-logo">
+  </div> 
+
+  <div class="flex-container">
+    <div class="flex-item">
+     
+      <p>FraudSafe is a cutting-edge AI-powered fraud detection system that leverages advanced technologies to safeguard businesses and individuals against fraudulent activities. 
+        <br> <br> With the ever-increasing sophistication of fraudulent practices, FRAUDSAFE recognizes the pressing need for a comprehensive solution that 
+        can adapt to evolving threats and protect organizations from financial losses and reputational damage.</p>
+      
+      <br><br><br>
+      
+    </div>
+    <div class="flex-item">
+      <img src="{{ url_for('static', filename='ai.jpg') }}" alt="Image 2">
+      
       <br><br>
       <a href="{{ url_for('prediction') }}" class="image-button">Explore the functions of FRAUDSAFE system</a>
     </div>
   </div>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Flex Container</title>
+  <link rel="stylesheet" type="text/css" href="../static/home.css">
+  <style>
+    /* Additional CSS styles for the new section */
+    #login-form-container {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="company-info">
+    <img src="{{ url_for('static', filename='new_logo.png') }}" alt="Company Logo" class="company-logo">
+  </div> 
+
+  <div class="flex-container">
+    <div class="flex-item">
+      <p>FraudSafe is a cutting-edge AI-powered fraud detection system that leverages advanced technologies to safeguard businesses and individuals against fraudulent activities. 
+        <br> <br> With the ever-increasing sophistication of fraudulent practices, FRAUDSAFE recognizes the pressing need for a comprehensive solution that 
+        can adapt to evolving threats and protect organizations from financial losses and reputational damage.</p>
+      <br><br><br>
+    </div>
+    <div class="flex-item">
+      <img src="{{ url_for('static', filename='ai.jpg') }}" alt="Image 2">
+      <br><br>
+      <a href="#" class="image-button" id="explore-button">Explore the functions of FRAUDSAFE system</a>
+    </div>
+  </div>
+
+  <!-- Login form section -->
+  <div id="login-form-container">
+    <form method="POST" action="{{ url_for('home') }}">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password">
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Login">
+      </div>
+    </form>
+  </div>
+  
+  <script>
+    const exploreButton = document.getElementById('explore-button');
+    const loginFormContainer = document.getElementById('login-form-container');
+
+    exploreButton.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent default link behavior
+
+      // Toggle the visibility of the login form container
+      loginFormContainer.style.display = loginFormContainer.style.display === 'none' ? 'block' : 'none';
+    });
+  </script>
+
+  <!-- Inside home.html -->
+  {% if login_error %}
+  <p class="error-message">Invalid credentials. Please try again.</p>
+  {% endif %}
+
+
+</body>
 </html>
+

@@ -21,6 +21,41 @@ from sklearn.metrics import classification_report
 
 app = Flask(__name__)
 
+
+# # Connect to the SQLite database
+# def connect_db():
+#     conn = sqlite3.connect('logindatabase.db')  # Replace 'your_database.db' with your database file path
+#     return conn
+
+# @app.route('/login', methods=['POST'])
+# def login():
+#     # Retrieve the submitted form data
+#     username = request.form.get('username')
+#     password = request.form.get('password')
+
+#     # Connect to the database
+#     conn = connect_db()
+#     cursor = conn.cursor()
+
+#     # Execute the query to validate the login credentials
+#     cursor.execute("SELECT * FROM logininfo WHERE username = ? AND password = ?", (username, password))
+#     user = cursor.fetchone()
+
+#     # Close the database connection
+#     cursor.close()
+#     conn.close()
+
+#     # Check if the user exists in the database
+#     if user is None:
+#         # Invalid credentials, redirect back to the login page with an error message
+#         return render_template('home.html', error='Invalid username or password')
+#     else:
+#         # Valid credentials, redirect to the dashboard or another page
+#         return redirect(url_for('result'))  # Replace 'dashboard' with the desired endpoint
+
+# Add other endpoints and routes as needed
+
+# Add other endpoints and routes as needed
 # Create a custom enumerate function for Jinja2
 def jinja2_enumerate(iterable, start=0):
     return enumerate(iterable, start=start)
@@ -40,9 +75,46 @@ with open(model_path, 'rb') as f:
 
 # model = tf.keras.models.load_model(model_path)
 
-@app.route('/')
+# @app.route('/')
+# def home():
+#     return render_template('home.html')
+
+# Function to connect to the database and validate credentials
+def check_credentials(username, password):
+    conn = sqlite3.connect('logindatabase.db')
+    cursor = conn.cursor()
+
+    # Execute a query to retrieve the user record based on the provided username
+    query = "SELECT * FROM logininfo WHERE Username = ? AND Password = ?"
+    cursor.execute(query, (username, password))
+    user = cursor.fetchone()
+
+    conn.close()
+
+    # Check if a user is found and if the provided password matches the stored password
+    if user is not None and user[0] == username and user[1] == password:
+        return True
+
+    return False
+
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        print(f"Username: {username}")
+        print(f"Password: {password}")
+
+        # Perform database validation here
+        if check_credentials(username, password):
+            print("Credentials valid. Redirecting to result.")
+            return redirect(url_for('prediction'))
+        else:
+            print("Credentials invalid. Rendering home.html with login error.")
+            return render_template('home.html',login_error=True)
+    else:
+        return render_template('home.html', login_error=False)
 
 @app.route('/dashboard')
 def dashboard():
@@ -220,113 +292,6 @@ def generate_bar_chart(labels, values):
     plt.close()
 
     return encoded_image
-
-# @app.route('/monitor', methods=['GET', 'POST'])
-# def monitor():
-#     if request.method == 'POST':
-#         # Handle the form submission
-#         nameOrig = request.form['nameOrig']
-
-#         # Connect to the SQLite database
-#         connection = sqlite3.connect(db_path)
-#         cursor = connection.cursor()
-
-#         # Execute a query to retrieve data for the given customer name
-#         query = "SELECT * FROM train_data WHERE nameOrig = ?"
-#         cursor.execute(query, (nameOrig,))
-
-#         # Fetch the data from the query result
-#         data = cursor.fetchall()
-
-#         # Close the database connection
-#         cursor.close()
-#         connection.close()
-
-#         # Check if any row has isFraud = 1
-#         is_fraudulent = any(row[11] == 1 for row in data)
-
-#         # Generate the bar chart
-#         labels = ['Fraudulent', 'Non-Fraudulent']
-#         values = [0, 0]  # Initialize with 0 occurrences
-#         for row in data:
-#             if row[11] == 1:
-#                 values[0] += 1
-#             elif row[11] == 0:
-#                 values[1] += 1
-
-#         bar_chart = generate_bar_chart(labels, values)
-
-#         # Generate the pie chart
-#         transaction_types = [row[8] for row in data]
-#         type_counts = {}
-#         for transaction_type in transaction_types:
-#             if transaction_type in type_counts:
-#                 type_counts[transaction_type] += 1
-#             else:
-#                 type_counts[transaction_type] = 1
-
-#         pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
-
-#         # Pass the data, is_fraudulent flag, bar chart, and pie chart to the template
-#         return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-#                                bar_chart=bar_chart, pie_chart=pie_chart)
-    
-#     else:
-#         # Handle the GET request (initial page load and customer search)
-#         search_type = request.args.get('searchType')
-#         search_value = request.args.get('searchValue')
-
-#         if search_type and search_value:
-#             # Connect to the SQLite database
-#             connection = sqlite3.connect(db_path)
-#             cursor = connection.cursor()
-
-#             # Execute a query to retrieve data based on the search type and value
-#             if search_type == 'nameOrig':
-#                 query = "SELECT * FROM train_data WHERE nameOrig = ?"
-#             elif search_type == 'nameDest':
-#                 query = "SELECT * FROM train_data WHERE nameDest = ?"
-
-#             cursor.execute(query, (search_value,))
-
-#             # Fetch the data from the query result
-#             data = cursor.fetchall()
-
-#             # Close the database connection
-#             cursor.close()
-#             connection.close()
-
-#             # Check if any row has isFraud = 1
-#             is_fraudulent = any(row[11] == 1 for row in data)
-
-#             # Generate the bar chart
-#             labels = ['Fraudulent', 'Non-Fraudulent']
-#             values = [0, 0]  # Initialize with 0 occurrences
-#             for row in data:
-#                 if row[11] == 1:
-#                     values[0] += 1
-#                 elif row[11] == 0:
-#                     values[1] += 1
-
-#             bar_chart = generate_bar_chart(labels, values)
-
-#             # Generate the pie chart
-#             transaction_types = [row[8] for row in data]
-#             type_counts = {}
-#             for transaction_type in transaction_types:
-#                 if transaction_type in type_counts:
-#                     type_counts[transaction_type] += 1
-#                 else:
-#                     type_counts[transaction_type] = 1
-
-#             pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
-
-#             # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
-#             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-#                                    searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
-
-#         # Render the empty form when it's a GET request without searchType and searchValue
-#         return render_template('monitor.html')
 
 import itertools
 # Custom filter to enable zip_longest in Jinja2 templates
