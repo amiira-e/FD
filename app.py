@@ -21,41 +21,6 @@ from sklearn.metrics import classification_report
 
 app = Flask(__name__)
 
-
-# # Connect to the SQLite database
-# def connect_db():
-#     conn = sqlite3.connect('logindatabase.db')  # Replace 'your_database.db' with your database file path
-#     return conn
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     # Retrieve the submitted form data
-#     username = request.form.get('username')
-#     password = request.form.get('password')
-
-#     # Connect to the database
-#     conn = connect_db()
-#     cursor = conn.cursor()
-
-#     # Execute the query to validate the login credentials
-#     cursor.execute("SELECT * FROM logininfo WHERE username = ? AND password = ?", (username, password))
-#     user = cursor.fetchone()
-
-#     # Close the database connection
-#     cursor.close()
-#     conn.close()
-
-#     # Check if the user exists in the database
-#     if user is None:
-#         # Invalid credentials, redirect back to the login page with an error message
-#         return render_template('home.html', error='Invalid username or password')
-#     else:
-#         # Valid credentials, redirect to the dashboard or another page
-#         return redirect(url_for('result'))  # Replace 'dashboard' with the desired endpoint
-
-# Add other endpoints and routes as needed
-
-# Add other endpoints and routes as needed
 # Create a custom enumerate function for Jinja2
 def jinja2_enumerate(iterable, start=0):
     return enumerate(iterable, start=start)
@@ -538,6 +503,18 @@ def show_data():
                                 searchType=search_type, searchValue=search_value)
 
     return render_template('result.html')
+
+from flask import session, redirect, url_for
+import secrets
+secret_key = secrets.token_hex(16)
+app.secret_key = secret_key
+
+@app.route('/logout')
+def logout():
+    # Clear session data
+    session.clear()
+    # Redirect the user to the desired page after logout
+    return redirect(url_for('home'))
 
 import csv
 from werkzeug.utils import secure_filename

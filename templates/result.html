@@ -223,8 +223,9 @@
     <link rel="stylesheet" type="text/css" href="../static/result.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
+</head>
 <body>
-    <a href="{{ url_for('home') }}" class="back-button">Back</a>
+    <!-- <a href="{{ url_for('home') }}" class="back-button">Back</a> -->
     <br><br><br>
     <div class="container">
         <div class="box">
@@ -263,5 +264,14 @@
             <p class="task-description">This option allows you to detect anomalies in transactions. Using advanced algorithms and statistical techniques, our system identifies patterns and outliers that deviate from expected behavior, enabling you to take timely action against potential fraud or suspicious activities.</p>
         </div>
     </div>
+    <!-- <a href="{{ url_for('logout') }}" class="text-right mt-3 custom-logout-link">
+      <i class="fas fa-sign-out-alt custom-logout-icon"></i> Logout
+  </a> -->
+
+  <a href="{{ url_for('logout') }}" class="custom-logout-link" onclick="return confirm('Are you sure you want to log out?')">
+    <i class="fas fa-sign-out-alt custom-logout-icon"></i> Logout
+  </a>
+
+  
 </body>
 </html>

@@ -140,3 +140,34 @@ body {
   width: 20%; /* Adjust the percentage as needed */
   height: 33%; /* To maintain the aspect ratio */
 }
+
+.logout-link {
+  position: absolute;  /* Position element absolutely */
+  top: 10px;  /* Distance from the top edge */
+  right: 10px;  /* Distance from the left edge */
+  text-decoration: none;
+  color: #d1e66a;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* .logout-link i {
+  padding-left: 150px;
+} */
+
+.custom-logout-link {
+  position: absolute;
+  top: 10px;
+  right: 24px;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  font-size: 18px;
+}
+
+.custom-logout-icon {
+  margin-right: 5px;
+  color: rgb(255, 255, 255);
+}
+
+
+
