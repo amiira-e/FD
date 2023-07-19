@@ -259,6 +259,11 @@ def generate_bar_chart(labels, values):
     return encoded_image
 
 import itertools
+import numpy as np
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+
 # Custom filter to enable zip_longest in Jinja2 templates
 @app.template_filter('zip_longest')
 def zip_longest_filter(*args, fillvalue=None):
@@ -365,10 +370,22 @@ def monitor():
 
             pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
 
+            # Retrieve the transaction amounts from the data
+            amounts = [row[2] for row in data]
 
-            # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
+            # Generate the Transaction Amount Distribution plot
+            amount_distribution_plot = generate_amount_distribution_plot(amounts)
+
+            # Pass the transaction amount distribution plot to the template
             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-                                   searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
+                                searchType=search_type, searchValue=search_value,
+                                bar_chart=bar_chart, pie_chart=pie_chart,
+                                amount_distribution_plot=amount_distribution_plot)
+
+
+            # # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
+            # return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
+            #                        searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
 
         # Render the empty form when it's a GET request without searchType and searchValue
         return render_template('monitor.html')
@@ -376,28 +393,38 @@ def monitor():
 import matplotlib.pyplot as plt
 import io
 import base64
-
-# def generate_recipient_chart_image(recipients_counts):
-#     recipients = [entry[0] for entry in recipients_counts]  # Access recipient information from the tuple
-#     counts = [entry[1] for entry in recipients_counts]  # Access count information from the tuple
-
-#     # Generate the bar chart
-#     plt.figure(figsize=(8, 6))
-#     plt.bar(recipients, counts)
-#     plt.xlabel('Recipient')
-#     plt.ylabel('Count')
-#     plt.title('Recipient Transaction Counts')
-
-#     # Convert the chart to a base64 encoded string
-#     buffer = io.BytesIO()
-#     plt.savefig(buffer, format='png')
-#     buffer.seek(0)
-#     chart_image = base64.b64encode(buffer.read()).decode()
-#     plt.close()
-
-#     return chart_image
-
 import matplotlib.pyplot as plt
+
+def generate_amount_distribution_plot(amounts):
+    # Create a histogram of transaction amounts
+    plt.hist(amounts, bins=20)
+    plt.xlabel('Transaction Amount', color='white')
+    plt.ylabel('Frequency', color='white')
+    plt.title('Transaction Amount Distribution', color='white')
+
+    # Set the background color to transparent
+    fig = plt.gcf()
+    fig.patch.set_alpha(0.0)
+
+    # Set the tick labels' color to white
+    plt.xticks(color='white')
+    plt.yticks(color='white')
+
+    # Set the frame color to white
+    ax = plt.gca()
+    ax.spines['top'].set_color('white')
+    ax.spines['bottom'].set_color('white')
+    ax.spines['left'].set_color('white')
+    ax.spines['right'].set_color('white')
+
+    # Convert the plot to a base64-encoded string with a transparent background
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png', transparent=True)
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
+    return plot_data
 
 def generate_pie_chart(labels, values):
     # Create a pie chart with custom colors and explode one or more slices
