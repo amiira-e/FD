@@ -269,6 +269,158 @@ import base64
 def zip_longest_filter(*args, fillvalue=None):
     return itertools.zip_longest(*args, fillvalue=fillvalue)
 
+
+import matplotlib.pyplot as plt
+import io
+import base64
+import matplotlib.pyplot as plt
+
+def generate_amount_distribution_plot(amounts):
+    # Create a histogram of transaction amounts
+    plt.hist(amounts, bins=20)
+    plt.xlabel('Transaction Amount', color='white')
+    plt.ylabel('Frequency', color='white')
+    plt.title('Transaction Amount Distribution', color='white')
+
+    # Set the background color to transparent
+    fig = plt.gcf()
+    fig.patch.set_alpha(0.0)
+
+    # Set the tick labels' color to white
+    plt.xticks(color='white')
+    plt.yticks(color='white')
+
+    # Set the frame color to white
+    ax = plt.gca()
+    ax.spines['top'].set_color('white')
+    ax.spines['bottom'].set_color('white')
+    ax.spines['left'].set_color('white')
+    ax.spines['right'].set_color('white')
+
+    # Convert the plot to a base64-encoded string with a transparent background
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png', transparent=True)
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
+    return plot_data
+# If you have information about the old and new balance of the origin and destination 
+# accounts, you can analyze balance transfers between customers. Plotting the balance transfers
+# over time or creating a heat map can provide insights into potential fraudulent activities involving large or frequent transfers.
+# Function to generate Balance Transfer Analysis plot
+
+# def generate_balance_transfer_plot(data):
+#     # Extract relevant data columns
+#     steps = [row[1] for row in data]
+#     old_balance_orig = [row[3] for row in data]
+#     new_balance_orig = [row[4] for row in data]
+#     old_balance_dest = [row[5] for row in data]
+#     new_balance_dest = [row[6] for row in data]
+
+#     # This calculation provides a measure of the net balance 
+#     # transferred from the original account to the destination account.
+#     # Calculate balance transfer for each transaction
+#     balance_transfer = [new_balance_orig[i] - old_balance_orig[i] - (new_balance_dest[i] - old_balance_dest[i]) for i in range(len(data))]
+
+#     # Create a line plot of balance transfer over time
+#     x = range(len(data))
+#     plt.plot(steps, balance_transfer)
+#     plt.xlabel('Transaction Index', color='white')
+#     plt.ylabel('Balance Transfer', color='white')
+#     plt.title('Balance Transfer Analysis', color='white')
+
+#     # Set the background color to transparent
+#     fig = plt.gcf()
+#     fig.patch.set_alpha(0.0)
+
+#     # Set the text color to white
+#     plt.xticks(color='white')
+#     plt.yticks(color='white')
+
+#     # Set the frame color to white
+#     ax = plt.gca()
+#     ax.spines['top'].set_color('white')
+#     ax.spines['bottom'].set_color('white')
+#     ax.spines['left'].set_color('white')
+#     ax.spines['right'].set_color('white')
+
+#     # Convert the plot to a base64-encoded string with a transparent background
+#     buffer = BytesIO()
+#     plt.savefig(buffer, format='png', transparent=True)
+#     buffer.seek(0)
+#     plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+#     plt.close()
+
+#     return plot_data
+
+def generate_balance_transfer_plot(data):
+    # Extract relevant data columns
+    steps = [row[1] for row in data]
+    old_balance_orig = [row[3] for row in data]
+    new_balance_orig = [row[4] for row in data]
+    old_balance_dest = [row[5] for row in data]
+    new_balance_dest = [row[6] for row in data]
+
+    # Calculate balance transfer for each transaction
+    balance_transfer = [new_balance_orig[i] - old_balance_orig[i] - (new_balance_dest[i] - old_balance_dest[i]) for i in range(len(data))]
+
+    # Create a scatter plot of balance transfer over time
+    plt.scatter(steps, balance_transfer, color='white')
+    plt.xlabel('Time step', color='white')
+    plt.ylabel('Balance Transfer', color='white')
+    plt.title('Balance Transfer Analysis', color='white')
+
+    # Set the background color to transparent
+    fig = plt.gcf()
+    fig.patch.set_alpha(0.0)
+
+    # Set the text color to white
+    plt.xticks(color='white')
+    plt.yticks(color='white')
+
+    # Set the frame color to white
+    ax = plt.gca()
+    ax.spines['top'].set_color('white')
+    ax.spines['bottom'].set_color('white')
+    ax.spines['left'].set_color('white')
+    ax.spines['right'].set_color('white')
+
+    # Convert the plot to a base64-encoded string with a transparent background
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png', transparent=True)
+    buffer.seek(0)
+    plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+
+    return plot_data
+
+    
+def generate_pie_chart(labels, values):
+    # Create a pie chart with custom colors and explode one or more slices
+    colors = ['#A63922', '#106675', '#4F0B73', '#ffcc99']  # Custom colors for slices
+
+    fig, ax = plt.subplots()
+    ax.pie(values, labels=labels, colors=colors,autopct='%1.1f%%', startangle=90)
+
+    # Customize additional properties of the pie chart
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    ax.set_title('Transaction Type Distribution', color='white')  # Set the title of the pie chart and make it white
+    ax.set_facecolor('none')  # Remove the white background
+
+    # Set the text color of labels and percentages to white
+    for text in ax.texts:
+        text.set_color('white')
+
+    # Convert the plot to an image
+    image_stream = io.BytesIO()
+    plt.savefig(image_stream, format='png', transparent=True)  # Save the plot with transparent background
+    image_stream.seek(0)
+    encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
+    plt.close()
+
+    return encoded_image
+    
 @app.route('/monitor', methods=['GET', 'POST'])
 def monitor():
     if request.method == 'POST':
@@ -315,10 +467,12 @@ def monitor():
 
         pie_chart = generate_pie_chart(type_counts.keys(), type_counts.values())
 
+        # Generate the balance transfer analysis plot
+        balance_transfer_plot = generate_balance_transfer_plot(data)
 
         # Pass the data, is_fraudulent flag, bar chart, pie chart, recipients, and counts to the template
         return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-                               bar_chart=bar_chart, pie_chart=pie_chart,)
+                               bar_chart=bar_chart, pie_chart=pie_chart, balance_transfer_plot= balance_transfer_plot)
     
     else:
         # Handle the GET request (initial page load and customer search)
@@ -376,81 +530,24 @@ def monitor():
             # Generate the Transaction Amount Distribution plot
             amount_distribution_plot = generate_amount_distribution_plot(amounts)
 
+            # Generate the balance transfer analysis plot
+            balance_transfer_plot = generate_balance_transfer_plot(data)
+
             # Pass the transaction amount distribution plot to the template
             return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
                                 searchType=search_type, searchValue=search_value,
                                 bar_chart=bar_chart, pie_chart=pie_chart,
-                                amount_distribution_plot=amount_distribution_plot)
+                                amount_distribution_plot=amount_distribution_plot,balance_transfer_plot =balance_transfer_plot )
 
 
-            # # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, and pie chart to the template
-            # return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-            #                        searchType=search_type, searchValue=search_value, bar_chart=bar_chart, pie_chart=pie_chart)
+        # # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, pie chart, and balance transfer plot to the template
+        # return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
+        #                        searchType=search_type, searchValue=search_value,
+        #                        bar_chart=bar_chart, pie_chart=pie_chart,
+        #                        balance_transfer_plot=balance_transfer_plot)
 
         # Render the empty form when it's a GET request without searchType and searchValue
         return render_template('monitor.html')
-
-import matplotlib.pyplot as plt
-import io
-import base64
-import matplotlib.pyplot as plt
-
-def generate_amount_distribution_plot(amounts):
-    # Create a histogram of transaction amounts
-    plt.hist(amounts, bins=20)
-    plt.xlabel('Transaction Amount', color='white')
-    plt.ylabel('Frequency', color='white')
-    plt.title('Transaction Amount Distribution', color='white')
-
-    # Set the background color to transparent
-    fig = plt.gcf()
-    fig.patch.set_alpha(0.0)
-
-    # Set the tick labels' color to white
-    plt.xticks(color='white')
-    plt.yticks(color='white')
-
-    # Set the frame color to white
-    ax = plt.gca()
-    ax.spines['top'].set_color('white')
-    ax.spines['bottom'].set_color('white')
-    ax.spines['left'].set_color('white')
-    ax.spines['right'].set_color('white')
-
-    # Convert the plot to a base64-encoded string with a transparent background
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png', transparent=True)
-    buffer.seek(0)
-    plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-    plt.close()
-
-    return plot_data
-
-def generate_pie_chart(labels, values):
-    # Create a pie chart with custom colors and explode one or more slices
-    colors = ['#A63922', '#106675', '#4F0B73', '#ffcc99']  # Custom colors for slices
-
-    fig, ax = plt.subplots()
-    ax.pie(values, labels=labels, colors=colors,autopct='%1.1f%%', startangle=90)
-
-    # Customize additional properties of the pie chart
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
-    ax.set_title('Transaction Type Distribution', color='white')  # Set the title of the pie chart and make it white
-    ax.set_facecolor('none')  # Remove the white background
-
-    # Set the text color of labels and percentages to white
-    for text in ax.texts:
-        text.set_color('white')
-
-    # Convert the plot to an image
-    image_stream = io.BytesIO()
-    plt.savefig(image_stream, format='png', transparent=True)  # Save the plot with transparent background
-    image_stream.seek(0)
-    encoded_image = base64.b64encode(image_stream.getvalue()).decode('utf-8')
-    plt.close()
-
-    return encoded_image
-
 
 @app.route('/result', methods=['GET', 'POST'])
 def show_data():

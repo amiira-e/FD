@@ -7,6 +7,8 @@
 </head>
 <body>
     <a href="{{ url_for('prediction') }}" class="back-button">Back</a>
+    <a href="{{ url_for('fraud') }}" class="fraud-button" style="position: absolute; top: 10px; right: 10px;">Next</a>
+
     <p id="form-section"></p>
     <h2>
         <i class="fas fa-chart-line"></i>
@@ -38,7 +40,7 @@
                 }
             });
         </script>
-        </div>
+    </div>
 
     {% if data %}
     <h2>
@@ -103,38 +105,68 @@
 
     <br><br>
 
-    {% if bar_chart %}
-    <h2>
-        <i class="fas fa-chart-bar"></i>
-        Transaction Fraud Distribution
-    </h2>
-    <div class="chart-container">
-        <img src="data:image/png;base64,{{ bar_chart }}" alt="Transaction Fraud Distribution" class="chart-image" />
-    </div>
-    {% endif %}
+    <div class="charts-flex-container">
 
-    <br><br>
+        <div class="chart-item">
+            {% if pie_chart %}
+            <h2>
+                <i class="fas fa-chart-pie"></i>
+                Transaction Type Distribution
+            </h2>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ pie_chart }}" alt="Transaction Type Distribution" class="chart-image" />
+            </div>
+            {% endif %}
+        </div>
 
-    {% if pie_chart %}
-    <h2>
-        <i class="fas fa-chart-pie"></i>
-        Transaction Type Distribution
-    </h2>
-    <div class="chart-container">
-        <img src="data:image/png;base64,{{ pie_chart }}" alt="Transaction Type Distribution" class="chart-image" />
+        <div class="chart-item">
+            {% if bar_chart %}
+            <h2>
+                <i class="fas fa-chart-bar"></i>
+                Transaction Fraud Distribution
+            </h2>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ bar_chart }}" alt="Transaction Fraud Distribution" class="chart-image" />
+            </div>
+            {% endif %}
+        </div>
+      
+        <div class="chart-item">
+           
+        <ul class="legend">
+            <li>0 - CASH_IN</li>
+            <li>1 - CASH_OUT</li>
+            <li>2 - DEBIT</li>
+            <li>3 - PAYMENT</li>
+            <li>4 - TRANSFER</li>
+        </ul>
+        </div>
+        
     </div>
-    {% endif %}
 
     {% if amount_distribution_plot %}
-<h2>
-    <i class="fas fa-chart-area"></i>
-    Transaction Amount Distribution
-</h2>
-<div class="chart-container">
-    <img src="data:image/png;base64,{{ amount_distribution_plot }}" alt="Transaction Amount Distribution" class="chart-image" />
-</div>
-{% endif %}
-
-
+    <div class="charts-flex-container">
+        <div class="chart-item">
+            <h2>
+                <i class="fas fa-chart-area"></i>
+                Transaction Amount Distribution
+            </h2>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ amount_distribution_plot }}" alt="Transaction Amount Distribution" class="chart-image" />
+            </div>
+        </div>
+        <div class="chart-item">
+            {% if balance_transfer_plot %}
+            <h2>
+                <i class="fas fa-chart-line"></i>
+                Balance Transfer Analysis
+            </h2>
+            <div class="chart-container">
+                <img src="data:image/png;base64,{{ balance_transfer_plot }}" alt="Balance Transfer Analysis" class="chart-image" />
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 </body>
 </html>

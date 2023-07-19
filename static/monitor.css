@@ -1,15 +1,8 @@
-/* body {
-
-    background-color: #000000;
-    background-repeat: no-repeat;
-    background-size: 100%;
-  } */
-
   body
 {
   background-image: url("../static/a.png");
   background-size:cover;
-  background-size: 130%;
+  background-size: 150%;
 }
   
   .sidenav .sidenav-title {
@@ -123,23 +116,7 @@
       box-shadow: 0 0 5px dodgerblue;
       color: rgb(0, 0, 0);
   }
-  
-  /* input[type="submit"] {
-   
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #000000;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    font-size: 12px;
-    font-family: Verdana, Geneva, sans-serif;
-  } */
-  
+
   select[name="searchType"] {
     font-size: 12px;
     font-family: Verdana, Geneva, sans-serif;
@@ -357,23 +334,6 @@
       color: #000000;
   }
   
-  /*detect fraud button*/
-  /* input[type="submit"] {
-    
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #5945c9; 
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    font-size: 12px;
-    font-family: Verdana, Geneva, sans-serif;
-  } */
-  
   input[type="submit"]:hover {
     background-color: #d4eaaf; /* Specify your desired background color on hover */
   }
@@ -434,6 +394,24 @@
     font-family: Verdana, Geneva, sans-serif;
 }
 
+.fraud-button {
+  position: absolute;
+  padding: 10px 20px;
+  top: 10px;
+  right: 10px;
+  background-color: #e0e4e8;
+  color: #000000;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 12px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.fraud-button:hover {
+  background-color: #e1f98b;
+}
+
 .back-button:hover {
     background-color: #e1f98b;
 }
@@ -455,3 +433,58 @@
   font-style: oblique;
   font-size: medium;
 }
+
+.charts-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.chart-item {
+  flex-basis: 48%;
+  margin-bottom: 2px;
+}
+
+.chart-container {
+  padding: 10px;
+}
+
+.chart-image {
+  width: 100%;
+  height: auto;
+}
+
+/* Additional styling for the charts */
+.chart-item h2 {
+  margin-bottom: 10px;
+}
+
+.chart-item i {
+  margin-right: 5px;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+  .chart-item {
+    flex-basis: 80%;
+  }
+}
+
+.legend-container {
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+}
+
+.legend {
+  list-style: none;
+  /* padding-left: 100px; */
+  margin-left: 500px;
+  color: white;
+}
+
+.legend li {
+  margin-bottom: 5px;
+  color: white;
+}
+
