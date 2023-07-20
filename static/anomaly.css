@@ -149,7 +149,7 @@ span.non-anomalous-customer {
 }
 
  /* CSS styles for the legend box */
- .legend-box {
+ /* .legend-box {
   position: absolute;
   top: 800px;
   right: 10px;
@@ -176,4 +176,29 @@ span.non-anomalous-customer {
   background-color: #c4e7c4;
   color:#000000;
   font-weight: bold;
+} */
+
+.legend-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align items to the right side */
+  border: 1px solid #ccc; /* Add a border with 1px width and #ccc color */
+  padding: 2px; /* Add padding for better visual appearance */
+}
+
+.legend-item {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.anomaly-color {
+  color: red;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.non-anomaly-color {
+  color: green;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
 }

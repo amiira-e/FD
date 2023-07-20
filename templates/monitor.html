@@ -26,7 +26,8 @@
     </form>
     <br><br><br>
 
-    <div id="error-message" class="error-message">
+    <!-- <div id="error-message" class="error-message">
+        <span id="error-text"></span>
         <script>
             document.querySelector('.form1').addEventListener('submit', function(event) {
                 var searchValue = document.getElementById('searchValue').value;
@@ -40,6 +41,34 @@
                 }
             });
         </script>
+    </div> -->
+
+    <div id="error-modal" class="error-modal">
+        <div class="error-content">
+            <span id="error-text"></span>
+            <button id="close-button">Close</button>
+
+            <script>
+                document.querySelector('.form1').addEventListener('submit', function(event) {
+                    var searchValue = document.getElementById('searchValue').value;
+                    var numericRegex = /^[0-9]+$/;
+            
+                    if (!numericRegex.test(searchValue)) {
+                        event.preventDefault(); // Prevent form submission
+                        var errorModal = document.getElementById('error-modal');
+                        var errorText = document.getElementById('error-text');
+                        errorText.textContent = 'Wrong input format';
+                        errorModal.classList.add('show');
+                    }
+                });
+            
+                document.getElementById('close-button').addEventListener('click', function() {
+                    var errorModal = document.getElementById('error-modal');
+                    errorModal.classList.remove('show');
+                });
+            </script>
+            
+        </div>
     </div>
 
     {% if data %}
@@ -115,7 +144,15 @@
             </h2>
             <div class="chart-container">
                 <img src="data:image/png;base64,{{ pie_chart }}" alt="Transaction Type Distribution" class="chart-image" />
+              
             </div>
+            <ul class="legend">
+                <li>0 - CASH_IN</li>
+                <li>1 - CASH_OUT</li>
+                <li>2 - DEBIT</li>
+                <li>3 - PAYMENT</li>
+                <li>4 - TRANSFER</li>
+            </ul>
             {% endif %}
         </div>
         
@@ -131,18 +168,10 @@
             {% endif %}
         </div>
 
-    
-
-        <div class="chart-item">
+   
             <!-- <h2>Legend</h2> -->
-        <ul class="legend">
-            <li>0 - CASH_IN</li>
-            <li>1 - CASH_OUT</li>
-            <li>2 - DEBIT</li>
-            <li>3 - PAYMENT</li>
-            <li>4 - TRANSFER</li>
-        </ul>
-        </div>
+      
+       
         
     </div>
 
