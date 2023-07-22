@@ -14,7 +14,6 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_curve, precision_recall_curve
 from tabulate import tabulate
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.ensemble import IsolationForest
 from sklearn.metrics import classification_report
@@ -37,12 +36,6 @@ model_path = os.path.join(os.path.dirname(__file__), 'static', 'modelnew.pkl')
 # Load the trained model
 with open(model_path, 'rb') as f:
     modelnew = pickle.load(f)
-
-# model = tf.keras.models.load_model(model_path)
-
-# @app.route('/')
-# def home():
-#     return render_template('home.html')
 
 # Function to connect to the database and validate credentials
 def check_credentials(username, password):
@@ -305,54 +298,6 @@ def generate_amount_distribution_plot(amounts):
     plt.close()
 
     return plot_data
-# If you have information about the old and new balance of the origin and destination 
-# accounts, you can analyze balance transfers between customers. Plotting the balance transfers
-# over time or creating a heat map can provide insights into potential fraudulent activities involving large or frequent transfers.
-# Function to generate Balance Transfer Analysis plot
-
-# def generate_balance_transfer_plot(data):
-#     # Extract relevant data columns
-#     steps = [row[1] for row in data]
-#     old_balance_orig = [row[3] for row in data]
-#     new_balance_orig = [row[4] for row in data]
-#     old_balance_dest = [row[5] for row in data]
-#     new_balance_dest = [row[6] for row in data]
-
-#     # This calculation provides a measure of the net balance 
-#     # transferred from the original account to the destination account.
-#     # Calculate balance transfer for each transaction
-#     balance_transfer = [new_balance_orig[i] - old_balance_orig[i] - (new_balance_dest[i] - old_balance_dest[i]) for i in range(len(data))]
-
-#     # Create a line plot of balance transfer over time
-#     x = range(len(data))
-#     plt.plot(steps, balance_transfer)
-#     plt.xlabel('Transaction Index', color='white')
-#     plt.ylabel('Balance Transfer', color='white')
-#     plt.title('Balance Transfer Analysis', color='white')
-
-#     # Set the background color to transparent
-#     fig = plt.gcf()
-#     fig.patch.set_alpha(0.0)
-
-#     # Set the text color to white
-#     plt.xticks(color='white')
-#     plt.yticks(color='white')
-
-#     # Set the frame color to white
-#     ax = plt.gca()
-#     ax.spines['top'].set_color('white')
-#     ax.spines['bottom'].set_color('white')
-#     ax.spines['left'].set_color('white')
-#     ax.spines['right'].set_color('white')
-
-#     # Convert the plot to a base64-encoded string with a transparent background
-#     buffer = BytesIO()
-#     plt.savefig(buffer, format='png', transparent=True)
-#     buffer.seek(0)
-#     plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-#     plt.close()
-
-#     return plot_data
 
 def generate_balance_transfer_plot(data):
     # Extract relevant data columns
@@ -539,13 +484,6 @@ def monitor():
                                 bar_chart=bar_chart, pie_chart=pie_chart,
                                 amount_distribution_plot=amount_distribution_plot,balance_transfer_plot =balance_transfer_plot )
 
-
-        # # Pass the data, is_fraudulent flag, search_type, search_value, bar chart, pie chart, and balance transfer plot to the template
-        # return render_template('monitor.html', data=data, is_fraudulent=is_fraudulent,
-        #                        searchType=search_type, searchValue=search_value,
-        #                        bar_chart=bar_chart, pie_chart=pie_chart,
-        #                        balance_transfer_plot=balance_transfer_plot)
-
         # Render the empty form when it's a GET request without searchType and searchValue
         return render_template('monitor.html')
 
@@ -661,135 +599,6 @@ with open(model_path_new, 'rb') as f:
 # Load the trained model
 with open(model_path, 'rb') as f:
     modelnew = pickle.load(f)
-
-# GOOOODD
-# Define your route for the page containing the prediction results
-# @app.route('/upload', methods=['GET', 'POST'])
-# def upload():
-#     if request.method == 'POST':
-#         # Get the uploaded file
-#         file = request.files['file']
-
-#         # Determine the selected model
-#         selected_model = request.form.get('selected_model')
-
-#         # Perform predictions and calculate metrics using the selected model
-#         if selected_model == 'modelnew':
-#             model = modelnew
-#         elif selected_model == 'cnnlstm':
-#             model = cnnlstm
-#         else:
-#             return 'Invalid model selection'
-
-#         # Save the file to a secure location
-#         filename = secure_filename(file.filename)
-#         file_path = os.path.join(app.root_path, 'static', filename)
-#         file.save(file_path)
-
-#         predictions, target, metrics, confusion = predict_and_calculate_metrics(file_path, model)
-
-#         # Return the predictions, metrics, and confusion matrix as a response
-#         return render_template('upload.html', results=list(zip(predictions, target)), metrics=metrics, confusion=confusion)
-
-#     return render_template('upload.html')
-
-# def predict_and_calculate_metrics(file_path, model):
-#     # Read the CSV file
-#     data = []
-#     target = []
-#     with open(file_path, 'r') as csvfile:
-#         reader = csv.reader(csvfile)
-#         next(reader)  # Skip the header row
-#         for row in reader:
-#             try:
-#                 target.append(float(row[-1]))  # Convert target variable to numeric type
-#             except ValueError:
-#                 print(f"Invalid value: {row[-1]}")
-#                 # Handle the case when the value cannot be converted to float
-#                 # For example, you can skip this row or assign a default/fallback value to target
-
-#             data.append(row[:-1])  # Exclude the last column (target variable)
-#   # Prepare the input data for prediction
-#     if model == cnnlstm:
-#         input_data = np.array(data, dtype=np.float32)
-#         input_data = np.reshape(input_data, (input_data.shape[0], 10, 1))  # Reshape the input data for "Model 2" (cnnlstm)
-#     else:
-#         input_data = np.array(data, dtype=np.float32)
-#         input_data = np.reshape(input_data, (input_data.shape[0], 1, input_data.shape[1]))
-
-# #     # Make predictions using the model
-# #     predictions = model.predict(input_data)
-
-# #     # Apply threshold and convert predictions to binary values
-# #     binary_predictions = (predictions >= 0.4115).astype(int) #0.0000082354  #predictions >= 0.5 predictions >= 0.6
-
-# # #   # Handle length discrepancy between target and binary_predictions
-# # #     if len(target) != len(binary_predictions):
-# # #         min_length = min(len(target), len(binary_predictions))
-# # #         target = target[:min_length]
-# # #         binary_predictions = binary_predictions[:min_length]
-
-# #     # Calculate evaluation metrics
-# #     precision = precision_score(target, binary_predictions)
-# #     recall = recall_score(target, binary_predictions)
-# #     f1 = f1_score(target, binary_predictions)
-
-# #     # Calculate confusion matrix
-# #     confusion = confusion_matrix(target, binary_predictions).tolist()
-
-#     y_pred_prob = model.predict(input_data)
-#     y_pred = (y_pred_prob > 0.5).astype(int)
-#     from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-
-#     # Make predictions on test data
-#     y_pred_prob = model.predict(input_data)
-
-#     # Threshold tuning
-#     thresholds = np.arange(0.1, 1.0, 0.1)
-#     best_f1_score = 0
-#     best_threshold = 0
-
-#     for threshold in thresholds:
-#         y_pred = (y_pred_prob > threshold).astype(int)
-#         f1 = f1_score(target, y_pred)
-
-#         if f1 > best_f1_score:
-#             best_f1_score = f1
-#             best_threshold = threshold
-
-#     # Apply best threshold to obtain final predictions
-#     y_pred = (y_pred_prob > best_threshold).astype(int)
-
-#   # Handle length discrepancy between target and binary_predictions
-#     if len(target) != len(y_pred):
-#         min_length = min(len(target), len(y_pred))
-#         target = target[:min_length]
-#         y_pred = y_pred[:min_length]
-
-#     # Compute evaluation metrics and confusion matrix
-#     precision = precision_score(target, y_pred)
-#     recall = recall_score(target, y_pred)
-#     f1 = f1_score(target, y_pred)
-#     cm = confusion_matrix(target, y_pred)
-
-#     print("Best Threshold:", best_threshold)
-#     print("Precision:", precision)
-#     print("Recall:", recall)
-#     print("F1 Score:", f1)
-#     print("Confusion Matrix:")
-#     print(cm)
-
-#     # Calculate confusion matrix
-#     confusion = confusion_matrix(target, y_pred).tolist()
-
-#     metrics = {
-#         'precision': precision,
-#         'recall': recall,
-#         'f1_score': f1
-#     }
-
-#     return y_pred, target, metrics, confusion
-
 
 ####### GOOD 2
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
@@ -925,8 +734,9 @@ import io
 @app.route('/anomaly', methods=['GET', 'POST'])
 def anomaly():
     if request.method == 'POST':
+    
         # Load your dataset and perform any necessary preprocessing
-        df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\Y3S1\\fyp\\cleandata.csv")
+        df = pd.read_csv("C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\DB_test\\cleandata.csv")
 
         # Load the pre-trained isolation forest model
         isolationforest = joblib.load('static/isolationforest.pkl')
@@ -938,11 +748,24 @@ def anomaly():
         outlier_scores = isolationforest.decision_function(X)
         outlier_predictions = isolationforest.predict(X)
 
+        # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
+        anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
+
         # Create a DataFrame with the original data and outlier scores
-        df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores})
+        df_outliers = pd.DataFrame({'nameOrig': df['nameOrig'], 'amount': X['amount'], 'Outlier Score': outlier_scores, 'Anomaly_Values':anomaly_values})
 
         # Sort the DataFrame by outlier scores in descending order
         df_outliers_sorted = df_outliers.sort_values(by='Outlier Score', ascending=False)
+
+        # Save the DataFrame to a CSV file
+        output_file_path = "C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\DB_test\\outliers.csv"
+        df_outliers_sorted.to_csv(output_file_path, index=False)
+
+        connection=sqlite3.connect('anomalous.db')
+        df_outliers_sorted.to_sql('outliers',connection,if_exists='replace')
+
+        # Store the sorted DataFrame in app.config
+        app.config['df_outliers_sorted'] = df_outliers_sorted
 
         # Retrieve the customer(s) with the highest outlier score
         num_rows = request.form.get('num_rows')
@@ -957,10 +780,8 @@ def anomaly():
 
         amounts = df_outliers['amount'].tolist()
 
-        # Convert the outlier predictions to anomaly values (-1 for outliers, 1 for inliers)
-        anomaly_values = [-1 if prediction == -1 else 1 for prediction in outlier_predictions]
-
         # Store the data in app.config dictionary
+        app.config['df'] = df
         app.config['highest_outlier_customers'] = highest_outlier_customers
         app.config['amounts'] = amounts
         app.config['outlier_scores'] = outlier_scores
@@ -994,84 +815,5 @@ def anomaly():
     # Render the HTML template for GET requests
     return render_template('anomaly.html', show_plot=False)
 
-
-# @app.route('/customer_details', methods=['POST'])
-# def customer_details():
-#     customer_name = request.form.get('customer_name')
-
-#     highest_outlier_customers = app.config.get('highest_outlier_customers')
-#     amounts = app.config.get('amounts')
-#     outlier_scores = app.config.get('outlier_scores')
-#     anomaly_values = app.config.get('anomaly_values')
-
-#     # Convert the customer_name to string for comparison
-#     customer_name = str(customer_name)
-
-#     if customer_name in highest_outlier_customers:
-#         customer_index = highest_outlier_customers.index(customer_name)
-
-#         # Retrieve the corresponding details from the other lists
-#         customer_details = {
-#             'nameOrig': highest_outlier_customers[customer_index],
-#             'amount': amounts[customer_index],
-#             'Outlier_Score': outlier_scores[customer_index],
-#             'Anomaly_Value': anomaly_values[customer_index]
-#         }
-#     else:
-#         # Customer not found
-#         customer_details = None
-
-#     return render_template('anomaly.html', show_plot=True, highest_outlier_customers=highest_outlier_customers,
-#                            amounts=amounts,
-#                            outlier_scores=outlier_scores, anomaly_values=anomaly_values,
-#                            customer_details=customer_details)
-
-# import sqlite3
-
-# @app.route('/customer_details', methods=['POST'])
-# def customer_details():
-#     customer_name = request.form.get('customer_name')
-
-#     # Connect to the SQLite database
-#     conn = sqlite3.connect('C:\\Users\\23059\\OneDrive\\Desktop\\Amiira\\DB_test\\demo.db')
-#     cursor = conn.cursor()
-
-#     # Query the database to fetch customer details
-#     query = "SELECT nameOrig, amount FROM fraud_data WHERE nameOrig = ?"
-#     cursor.execute(query, (customer_name,))
-#     result = cursor.fetchone()
-
-#     # Close the database connection
-#     cursor.close()
-#     conn.close()
-
-#     if result:
-#         # Customer details found
-#         customer_details = {
-#             'nameOrig': result[0],
-#             'amount': result[1],
-#             # 'Outlier_Score': result[2],
-#             # 'Anomaly_Value': result[3]
-#         }
-#     else:
-#         # Customer not found
-#         customer_details = None
-
-#     return render_template('anomaly.html', show_plot=True, customer_details=customer_details)
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
