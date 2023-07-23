@@ -77,7 +77,15 @@
   
       <br><br>
       {% endif %}
-  
+
+      <!-- Add this form inside the <body> tag -->
+        <form action="/search_customer" method="POST">
+            <label for="customer_name">Enter customer name (nameOrig):</label>
+            <input type="text" id="customer_name" name="customer_name">
+            <input type="submit" value="Search" class="action-button">
+        </form>
+        
+
   </body>
   </html>
   

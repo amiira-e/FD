@@ -731,6 +731,7 @@ import pandas as pd
 import joblib
 import io
 
+# Good
 @app.route('/anomaly', methods=['GET', 'POST'])
 def anomaly():
     if request.method == 'POST':
@@ -780,13 +781,6 @@ def anomaly():
 
         amounts = df_outliers['amount'].tolist()
 
-        # Store the data in app.config dictionary
-        app.config['df'] = df
-        app.config['highest_outlier_customers'] = highest_outlier_customers
-        app.config['amounts'] = amounts
-        app.config['outlier_scores'] = outlier_scores
-        app.config['anomaly_values'] = anomaly_values
-
         # Perform anomaly detection and generate the plot
         plt.figure()  # Create a new figure
         plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
@@ -806,14 +800,100 @@ def anomaly():
         # Convert the buffer to base64 encoded string
         plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
+        # Store the plot_data in app.config for later retrieval
+        app.config['plot_data'] = plot_data
+
         # Return the HTML template with the specific customer's information
         return render_template('anomaly.html', outlier_scores=outlier_scores,
-                               highest_outlier_customers=highest_outlier_customers,
-                               show_plot=True, plot_data=plot_data, amounts=amounts,
-                               anomaly_values=anomaly_values)
+                            highest_outlier_customers=highest_outlier_customers,
+                            show_plot=True, plot_data=plot_data, amounts=amounts,
+                            anomaly_values=anomaly_values)
+
 
     # Render the HTML template for GET requests
     return render_template('anomaly.html', show_plot=False)
+
+@app.route('/search_customer', methods=['POST'])
+def search_customer():
+    # Retrieve the customer name (nameOrig) from the form input
+    customer_name = request.form.get('customer_name')
+
+    # Fetch the relevant data from the database for the given customer name
+    connection = sqlite3.connect('anomalous.db')
+    query = f"SELECT * FROM outliers WHERE nameOrig = ?"
+    df_customer_data = pd.read_sql_query(query, connection, params=[customer_name])
+
+    # Check if the customer data exists in the database
+    if df_customer_data.empty:
+        return "Customer not found!"
+
+    # Extract the required information from the DataFrame
+    outlier_scores = df_customer_data['Outlier Score'].tolist()
+    amounts = df_customer_data['amount'].tolist()
+    anomaly_values = df_customer_data['Anomaly_Values'].tolist()
+
+    # Retrieve the plot_data from app.config
+    plot_data = app.config.get('plot_data')
+
+    # Return the HTML template with the specific customer's information
+    return render_template('anomaly.html', outlier_scores=outlier_scores,
+                           highest_outlier_customers=df_customer_data['nameOrig'].tolist(),
+                           show_plot=True, plot_data=plot_data, amounts=amounts,
+                           anomaly_values=anomaly_values)
+
+# second
+# @app.route('/search_customer', methods=['POST'])
+# def search_customer():
+#     # Retrieve the customer name (nameOrig) from the form input
+#     customer_name = request.form.get('customer_name')
+
+#     # Fetch the relevant data from the database for the given customer name
+#     connection = sqlite3.connect('anomalous.db')
+#     query = f"SELECT * FROM outliers WHERE nameOrig = ?"
+#     df_customer_data = pd.read_sql_query(query, connection, params=[customer_name])
+
+#     # Check if the customer data exists in the database
+#     if df_customer_data.empty:
+#         return "Customer not found!"
+
+#     # Extract the required information from the DataFrame
+#     outlier_scores = df_customer_data['Outlier Score'].tolist()
+#     amounts = df_customer_data['amount'].tolist()
+#     anomaly_values = df_customer_data['Anomaly_Values'].tolist()
+
+#     # Retrieve the plot_data from app.config
+#     plot_data = app.config.get('plot_data')
+
+#     # Return the HTML template with the specific customer's information
+#     return render_template('anomaly.html', outlier_scores=outlier_scores,
+#                            highest_outlier_customers=[customer_name],
+#                            show_plot=True, plot_data=plot_data, amounts=amounts,
+#                            anomaly_values=anomaly_values)
+
+# @app.route('/search_customer', methods=['POST'])
+# def search_customer():
+#     # Retrieve the customer name (nameOrig) from the form input
+#     customer_name = request.form.get('customer_name')
+
+#     # Fetch the relevant data from the database for the given customer name
+#     connection = sqlite3.connect('anomalous.db')
+#     query = f"SELECT * FROM outliers WHERE nameOrig = ?"
+#     df_customer_data = pd.read_sql_query(query, connection, params=[customer_name])
+
+#     # Check if the customer data exists in the database
+#     if df_customer_data.empty:
+#         return "Customer not found!"
+
+#     # Extract the required information from the DataFrame
+#     outlier_scores = df_customer_data['Outlier Score'].tolist()
+#     amounts = df_customer_data['amount'].tolist()
+#     anomaly_values = df_customer_data['Anomaly_Values'].tolist()
+
+#     # Return the HTML template with the specific customer's information
+#     return render_template('anomaly.html', outlier_scores=outlier_scores,
+#                            highest_outlier_customers=[customer_name],
+#                            show_plot=True, plot_data=None, amounts=amounts,
+#                            anomaly_values=anomaly_values)
 
 if __name__ == '__main__':
     app.run(debug=True)
