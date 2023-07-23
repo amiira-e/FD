@@ -18,20 +18,35 @@
   
       <p id="loading-text" style="display: none">Customers' outlier score loading.........</p>
       
-      <br><br>
+      <br><br><br>
+
+      <form id="customer_search_form" action="/search_customer" method="POST">
+        <label for="customer_name">Enter customer name:</label>
+        <input type="text" id="customer_name" name="customer_name">
+        <input type="submit" value="Search" class="action-button">
+    </form>
       
+    <br><br>
+
       {% if show_plot %}
-      <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot</h2>
+      <!-- <h2 id="anomaly-plot-heading" style="display: none">Anomaly Plot</h2>
       <div style="display: flex; justify-content: center;">
           <img src="data:image/png;base64,{{ plot_data }}" alt="Anomaly Plot">
-      </div>
+      </div> -->
+
+      {% if show_plot %}
+        <h2 id="anomaly-plot-heading" style="display: none"></h2>
+        <div style="display: flex; justify-content: center;">
+            <img src="data:image/png;base64,{{ plot_data }}" alt="Anomaly Plot" style="width: 40%; height: 45%;">
+        </div>
+    {% endif %}
+
   
       <div class="legend-box">
           <span class="legend-item anomaly-color">Anomalous customer (1)</span>
           <span class="legend-item non-anomaly-color">Non-anomalous customer (0)</span>
       </div>
       
-  
       <script>
           function showAnomalyPlot() {
               var plotHeading = document.getElementById('anomaly-plot-heading');
@@ -50,10 +65,10 @@
   
       {% endif %}
   
-      <br><br><br>
+      <br><br>
   
       {% if highest_outlier_customers %}
-      <h3 id="highest-outlier-heading">Outlier Scores</h3>
+      <h3 id="highest-outlier-heading">Customer details obtained via Isolation Forest</h3>
       <table>
           <thead>
               <tr>
@@ -79,13 +94,13 @@
       {% endif %}
 
       <!-- Add this form inside the <body> tag -->
-        <form action="/search_customer" method="POST">
+        <!-- <form action="/search_customer" method="POST">
             <label for="customer_name">Enter customer name (nameOrig):</label>
             <input type="text" id="customer_name" name="customer_name">
             <input type="submit" value="Search" class="action-button">
-        </form>
+        </form> -->
+       
         
-
   </body>
   </html>
   

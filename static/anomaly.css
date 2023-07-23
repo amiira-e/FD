@@ -60,6 +60,7 @@ label {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 input[type="number"] {
@@ -135,32 +136,20 @@ table {
 #highest-outlier-heading {
   color:  #ffffff;;
   font-size: 16px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   text-align: center;
 }
-span.anomalous-customer {
-  color: red;
-  font-weight: bold;
+
+.legend-box {
+  /* Flexbox properties to center the content */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  /* Add any other styles for the legend-box as needed */
+  margin-top: 20px; /* Optional: Add margin to adjust the vertical position */
 }
 
-span.non-anomalous-customer {
-  color: green;
-  font-weight: bold;
-}
-
- /* CSS styles for the legend box */
- /* .legend-box {
-  position: absolute;
-  top: 800px;
-  right: 10px;
-  display: inline-block;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  color:#000000;
-}
-
-.legend-item {
+/*.legend-item {
   margin-right: 10px;
   color:#000000;
   font-weight: bold;
@@ -182,8 +171,8 @@ span.non-anomalous-customer {
   display: flex;
   flex-direction: column;
   align-items: flex-end; /* Align items to the right side */
-  border: 1px solid #ccc; /* Add a border with 1px width and #ccc color */
-  padding: 2px; /* Add padding for better visual appearance */
+  /* border: 1px solid #ccc; /* Add a border with 1px width and #ccc color
+  padding: 2px;  */
 }
 
 .legend-item {
@@ -192,13 +181,61 @@ span.non-anomalous-customer {
 }
 
 .anomaly-color {
-  color: red;
-  font-size: 14px;
+  color: rgb(243, 67, 54);
+  font-size:large;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .non-anomaly-color {
-  color: green;
-  font-size: 14px;
+  color: rgb(128, 151, 225);
+  font-size:large;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+  /* CSS for the second form (ID: customer_search_form) */
+  #customer_search_form {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      /* background-color: #4d0a5b; */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  #customer_search_form label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 16px; /* Adjust the font size as needed */
+      font-family: Arial, sans-serif; 
+  }
+
+  #customer_search_form input[type="text"] {
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+      transition: border-color 0.3s ease;
+  }
+
+  #customer_search_form input[type="text"]:focus {
+      border-color: #007bff;
+  }
+
+  #customer_search_form input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+
+  #customer_search_form input[type="submit"]:hover {
+      background-color: #0056b3;
+  }

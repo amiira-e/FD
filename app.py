@@ -781,15 +781,36 @@ def anomaly():
 
         amounts = df_outliers['amount'].tolist()
 
+        # # Perform anomaly detection and generate the plot
+        # plt.figure()  # Create a new figure
+        # plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
+        # plt.xlabel('Transaction Amount', color='white')
+        # plt.ylabel('Outlier Score', color='white')
+        # plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
+        # colorbar = plt.colorbar(orientation='vertical')
+        # colorbar.set_label('Outlier Prediction', color='white')
+        # colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
+        # plt.tick_params(colors='white')
+
         # Perform anomaly detection and generate the plot
         plt.figure()  # Create a new figure
-        plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
+        scatter_plot = plt.scatter(df_outliers['amount'], df_outliers['Outlier Score'], c=outlier_predictions, cmap='coolwarm')
         plt.xlabel('Transaction Amount', color='white')
         plt.ylabel('Outlier Score', color='white')
         plt.title('Anomaly Detection: Transaction Amount vs Outlier Score', color='white')
-        colorbar = plt.colorbar(orientation='vertical')
+
+        # Modify the color bar to set the text color and tick label color to white
+        colorbar = plt.colorbar(scatter_plot, orientation='vertical')
         colorbar.set_label('Outlier Prediction', color='white')
-        colorbar.ax.yaxis.set_tick_params(color='white')  # Set tick labels color to white
+        colorbar.ax.yaxis.set_tick_params(color='white')
+
+        # Set the color of the color bar ticks to white
+        colorbar.ax.yaxis.set_tick_params(color='white')
+
+        # Set the color of the color bar label to white
+        colorbar.ax.yaxis.get_label().set_color('white')
+
+        # Set the color of the ticks and tick labels on the x and y axes to white
         plt.tick_params(colors='white')
 
         # Save the plot to a BytesIO buffer
